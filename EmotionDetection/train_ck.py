@@ -1,7 +1,10 @@
-import numpy, hyper
+import numpy, hyper, os
 import matplotlib.pyplot as pyplot
 
 from sklearn.model_selection import train_test_split
+
+# Change Keras Backend
+#os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
 
 # Hyperparameters
 no_of_features = hyper.NO_OF_FEATURES
