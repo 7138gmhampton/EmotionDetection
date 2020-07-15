@@ -23,43 +23,43 @@ rows, cols = hyper.ROWS, hyper.COLS
 def build_model(hp):
     model = Sequential()
 
-    #features_from_filters = hp.Int('filters', min_values=32, max_value=512, step=32)
+    features_from_filters = hp.Int('filters', min_value=32, max_value=512, step=32)
     
-    model.add(Conv2D(no_of_features, kernel_size=(3, 3), activation='relu', 
+    model.add(Conv2D(features_from_filters, kernel_size=(3, 3), activation='relu', 
         input_shape=(rows, cols, 1), data_format='channels_last', kernel_regularizer=l2(0.01)))
-    model.add(Conv2D(no_of_features, kernel_size=(3, 3), activation='relu', padding='same'))
+    model.add(Conv2D(features_from_filters, kernel_size=(3, 3), activation='relu', padding='same'))
     model.add(BatchNormalization())
     model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
     model.add(Dropout(0.5))
 
-    model.add(Conv2D(2*no_of_features, kernel_size=(3, 3), activation='relu', padding='same'))
+    model.add(Conv2D(2*features_from_filters, kernel_size=(3, 3), activation='relu', padding='same'))
     model.add(BatchNormalization())
-    model.add(Conv2D(2*no_of_features, kernel_size=(3, 3), activation='relu', padding='same'))
-    model.add(BatchNormalization())
-    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-    model.add(Dropout(0.5))
-
-    model.add(Conv2D(2*2*no_of_features, kernel_size=(3, 3), activation='relu', padding='same'))
-    model.add(BatchNormalization())
-    model.add(Conv2D(2*2*no_of_features, kernel_size=(3, 3), activation='relu', padding='same'))
+    model.add(Conv2D(2*features_from_filters, kernel_size=(3, 3), activation='relu', padding='same'))
     model.add(BatchNormalization())
     model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
     model.add(Dropout(0.5))
 
-    model.add(Conv2D(2*2*2*no_of_features, kernel_size=(3, 3), activation='relu', padding='same'))
+    model.add(Conv2D(2*2*features_from_filters, kernel_size=(3, 3), activation='relu', padding='same'))
     model.add(BatchNormalization())
-    model.add(Conv2D(2*2*2*no_of_features, kernel_size=(3, 3), activation='relu', padding='same'))
+    model.add(Conv2D(2*2*features_from_filters, kernel_size=(3, 3), activation='relu', padding='same'))
+    model.add(BatchNormalization())
+    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
+    model.add(Dropout(0.5))
+
+    model.add(Conv2D(2*2*2*features_from_filters, kernel_size=(3, 3), activation='relu', padding='same'))
+    model.add(BatchNormalization())
+    model.add(Conv2D(2*2*2*features_from_filters, kernel_size=(3, 3), activation='relu', padding='same'))
     model.add(BatchNormalization())
     model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
     model.add(Dropout(0.5))
 
     model.add(Flatten())
 
-    model.add(Dense(2*2*2*no_of_features, activation='relu'))
+    model.add(Dense(2*2*2*features_from_filters, activation='relu'))
     model.add(Dropout(0.5))
-    model.add(Dense(2*2*no_of_features, activation='relu'))
+    model.add(Dense(2*2*features_from_filters, activation='relu'))
     model.add(Dropout(0.5))
-    model.add(Dense(2*no_of_features, activation='relu'))
+    model.add(Dense(2*features_from_filters, activation='relu'))
     model.add(Dropout(0.5))
 
     model.add(Dense(no_of_labels, activation='softmax'))
@@ -162,6 +162,14 @@ print(' -- Test Data Saved --')
 
 from kerastuner.tuners import RandomSearch
 
-tuner = RandomSearch(build_model, objective='val_accuracy', max_trials=1, executions_per_trial=1)
+tuner = RandomSearch(build_model, objective='val_accuracy', max_trials=1, executions_per_trial=1,
+                     directory='tuning_model')
 
 tuner.search_space_summary()
+
+tuner.search(numpy.array(data_train),
+             numpy.array(labels_train),
+             batch_size=batch_size,
+             epochs=no_of_epochs,
+             verbose=1,
+             validation_data=(numpy.array(data_valid), numpy.array(labels_valid)))
