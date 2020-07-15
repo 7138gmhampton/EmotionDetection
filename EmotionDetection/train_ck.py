@@ -11,6 +11,7 @@ from keras.layers import Dense, Dropout, Activation, Flatten, Conv2D, MaxPooling
 from keras.losses import categorical_crossentropy
 from keras.optimizers import Adam
 from keras.regularizers import l2
+from kerastuner.engine.hyperparameters import HyperParameter
 
 # Hyperparameters
 no_of_features = hyper.NO_OF_FEATURES
@@ -19,9 +20,11 @@ batch_size = hyper.BATCH_SIZE
 no_of_epochs = hyper.NO_OF_EPOCHS
 rows, cols = hyper.ROWS, hyper.COLS
 
-def build_model():
+def build_model(hp):
     model = Sequential()
 
+    #features_from_filters = hp.Int('filters', min_values=32, max_value=512, step=32)
+    
     model.add(Conv2D(no_of_features, kernel_size=(3, 3), activation='relu', 
         input_shape=(rows, cols, 1), data_format='channels_last', kernel_regularizer=l2(0.01)))
     model.add(Conv2D(no_of_features, kernel_size=(3, 3), activation='relu', padding='same'))
@@ -61,7 +64,7 @@ def build_model():
 
     model.add(Dense(no_of_labels, activation='softmax'))
 
-    model.summary()
+    #model.summary()
 
     # Compile Model
     model.compile(loss=categorical_crossentropy, optimizer=Adam(), metrics=['accuracy'])
@@ -146,13 +149,19 @@ print(' -- Test Data Saved --')
 
 #model.summary()
 
-model = build_model()
+#model = build_model()
 
 # Train Model
-model.fit(numpy.array(data_train), 
-          numpy.array(labels_train), 
-          batch_size=batch_size, 
-          epochs=no_of_epochs,
-          verbose=1,
-          validation_data=(numpy.array(data_valid), numpy.array(labels_valid)),
-          shuffle=True)
+#model.fit(numpy.array(data_train), 
+#          numpy.array(labels_train), 
+#          batch_size=batch_size, 
+#          epochs=no_of_epochs,
+#          verbose=1,
+#          validation_data=(numpy.array(data_valid), numpy.array(labels_valid)),
+#          shuffle=True)
+
+from kerastuner.tuners import RandomSearch
+
+tuner = RandomSearch(build_model, objective='val_accuracy', max_trials=1, executions_per_trial=1)
+
+tuner.search_space_summary()
