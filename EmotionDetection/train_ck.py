@@ -63,6 +63,9 @@ def build_model():
 
     model.summary()
 
+    # Compile Model
+    model.compile(loss=categorical_crossentropy, optimizer=Adam(), metrics=['accuracy'])
+
     return model
 
 # Load Training Data
@@ -144,9 +147,6 @@ print(' -- Test Data Saved --')
 #model.summary()
 
 model = build_model()
-
-# Compile Model
-model.compile(loss=categorical_crossentropy, optimizer=Adam(), metrics=['accuracy'])
 
 # Train Model
 model.fit(numpy.array(data_train), 
