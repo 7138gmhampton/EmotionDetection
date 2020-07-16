@@ -85,10 +85,10 @@ def save_trained_model(model, accuracy):
     with open(os.path.join(directory, model_name),'w') as json_file:
         json_file.write(model_json)
     with open(os.path.join(directory, details_name), 'w') as text_file:
-        text_file.write('Accuracy: ' + '{:1.3f}'.format(accuracy))
+        text_file.write('Accuracy: ' + '{:1.3f}'.format(accuracy) + '\n')
     model.save_weights(os.path.join(directory, weights_name))
 
-    print(' -- Model Saved')
+    print(' -- Model Saved --')
 
 # Load Training Data
 data = numpy.load('ck_data.npy')
