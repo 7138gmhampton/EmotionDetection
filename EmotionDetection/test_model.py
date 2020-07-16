@@ -1,4 +1,4 @@
-import argparse, os, hyper
+import argparse, os, hyper, numpy
 
 from keras.models import model_from_json, Sequential
 
@@ -26,3 +26,7 @@ timestamp = args.timestamp
 
 model = acquire_model(timestamp)
 print(' -- Model loaded from file --')
+
+# Load Testing Data
+data = numpy.load('ck_test_data.npy')
+labels = numpy.load('ck_test_labels.npy')
