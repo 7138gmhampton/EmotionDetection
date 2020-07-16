@@ -1,4 +1,5 @@
 import argparse, hyper, numpy, os
+import matplotlib.pyplot as pyplot
 
 from keras.preprocessing.image import load_img, img_to_array
 from keras.models import model_from_json
@@ -32,5 +33,11 @@ checkable_data = numpy.expand_dims(checkable_data, -1)
 # Prepare Model
 model = acquire_model(args.timestamp)
 
-print(checkable_data.shape)
-model.summary()
+#print(checkable_data.shape)
+#model.summary()
+
+# Make Prediction
+prediction = model.predict(checkable_data).tolist()[0]
+#print(prediction[0])
+#print(prediction[2])
+#print(prediction[6])
