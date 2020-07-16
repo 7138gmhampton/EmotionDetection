@@ -261,3 +261,4 @@ __pycache__/
 *.pyc
 *.npy
 /EmotionDetection/models
+/EmotionDetection/example.png

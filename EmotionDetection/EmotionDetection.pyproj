@@ -21,6 +21,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="demonstrate.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="EmotionDetection.py" />
     <Compile Include="hyper.py" />
     <Compile Include="preprocess_ck.py" />
