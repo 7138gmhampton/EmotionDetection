@@ -60,3 +60,8 @@ for iii in range(len(labels)):
 accuracy = (count_of_matches/len(labels))
 print('Accuracy of ' + timestamp +' model: ' + '{:2.2f}'.format(accuracy*100) + '%')
 log_accuracy(timestamp, accuracy)
+
+# Save Prediction and True Labels Lists for Confusion Matrix
+numpy.save('prediction_list', prediction_list)
+numpy.save('true_list', true_list)
+print(' -- Lists saved --')
