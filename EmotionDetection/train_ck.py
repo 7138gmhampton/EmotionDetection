@@ -86,6 +86,9 @@ def save_trained_model(model, accuracy):
         json_file.write(model_json)
     with open(os.path.join(directory, details_name), 'w') as text_file:
         text_file.write('Accuracy: ' + '{:1.3f}'.format(accuracy) + '\n')
+        text_file.write('Scale Factor: ' + '{:2d}'.format(hyper.SCALE_FACTOR) + '\n')
+        text_file.write('Batch Size: ' + '{:3d}'.format(hyper.BATCH_SIZE) + '\n')
+        text_file.write('No. of Epochs: ' + '{:3d}'.format(hyper.NO_OF_EPOCHS) + '\n')
     model.save_weights(os.path.join(directory, weights_name))
 
     print(' -- Model Saved --')
