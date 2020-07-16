@@ -1,7 +1,8 @@
-import numpy, hyper, os
+import numpy, hyper, os, sys
 import matplotlib.pyplot as pyplot
 
 from sklearn.model_selection import train_test_split
+from datetime import datetime
 
 # Change Keras Backend
 #os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
@@ -71,6 +72,23 @@ def build_model():
     model.compile(loss=categorical_crossentropy, optimizer=Adam(), metrics=['accuracy'])
 
     return model
+
+def save_trained_model(model, accuracy):
+    #now = datetime.now()
+    directory = 'models'
+    timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M')
+    model_name = timestamp + '_model.json'
+    weights_name = timestamp + '_weights.h5'
+    details_name = timestamp + '_details.txt'
+
+    model_json = model.to_json()
+    with open(os.path.join(directory, model_name),'w') as json_file:
+        json_file.write(model_json)
+    with open(os.path.join(directory, details_name), 'w') as text_file:
+        text_file.write('Accuracy: ' + '{:1.3f}'.format(accuracy))
+    model.save_weights(os.path.join(directory, weights_name))
+
+    print(' -- Model Saved')
 
 # Load Training Data
 data = numpy.load('ck_data.npy')
@@ -177,10 +195,14 @@ print(' -- Test Data Saved --')
 
 model = build_model()
 
-model.fit(numpy.array(data_train), 
+history = model.fit(numpy.array(data_train), 
           numpy.array(labels_train), 
           batch_size=batch_size, 
           epochs=no_of_epochs,
           verbose=1,
           validation_data=(numpy.array(data_valid), numpy.array(labels_valid)),
           shuffle=True)
+
+# Save Model
+save_trained_model(model, history.history['val_accuracy'][-1])
+#print(history.history['val_accuracy'][-1])
