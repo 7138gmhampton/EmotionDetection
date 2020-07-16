@@ -1,4 +1,4 @@
-import numpy, hyper, os, sys
+import numpy, hyper, os, sys, argparse
 import matplotlib.pyplot as pyplot
 
 from sklearn.model_selection import train_test_split
@@ -14,11 +14,17 @@ from keras.optimizers import Adam
 from keras.regularizers import l2
 from kerastuner.engine.hyperparameters import HyperParameter
 
+# Command Line Parameter
+parser = argparse.ArgumentParser(description='Train CNN model with Cohn-Kanade dataset.')
+parser.add_argument('-e', '--epochs', type=int , required=True)
+args = parser.parse_args()
+
 # Hyperparameters
 no_of_features = hyper.NO_OF_FEATURES
 no_of_labels = hyper.NO_OF_LABELS
 batch_size = hyper.BATCH_SIZE
-no_of_epochs = hyper.NO_OF_EPOCHS
+#no_of_epochs = hyper.NO_OF_EPOCHS
+no_of_epochs = args.epochs
 rows, cols = hyper.ROWS, hyper.COLS
 
 def build_model():
@@ -88,7 +94,7 @@ def save_trained_model(model, accuracy):
         text_file.write('Accuracy: ' + '{:1.3f}'.format(accuracy) + '\n')
         text_file.write('Scale Factor: ' + '{:2d}'.format(hyper.SCALE_FACTOR) + '\n')
         text_file.write('Batch Size: ' + '{:3d}'.format(hyper.BATCH_SIZE) + '\n')
-        text_file.write('No. of Epochs: ' + '{:3d}'.format(hyper.NO_OF_EPOCHS) + '\n')
+        text_file.write('No. of Epochs: ' + '{:3d}'.format(no_of_epochs) + '\n')
     model.save_weights(os.path.join(directory, weights_name))
 
     print(' -- Model Saved --')
