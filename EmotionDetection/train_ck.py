@@ -20,10 +20,11 @@ batch_size = hyper.BATCH_SIZE
 no_of_epochs = hyper.NO_OF_EPOCHS
 rows, cols = hyper.ROWS, hyper.COLS
 
-def build_model(hp):
+def build_model():
     model = Sequential()
 
-    features_from_filters = hp.Int('filters', min_value=32, max_value=512, step=32)
+    #features_from_filters = hp.Int('filters', min_value=32, max_value=512, step=32)
+    features_from_filters = no_of_features
     
     model.add(Conv2D(features_from_filters, kernel_size=(3, 3), activation='relu', 
         input_shape=(rows, cols, 1), data_format='channels_last', kernel_regularizer=l2(0.01)))
@@ -160,16 +161,26 @@ print(' -- Test Data Saved --')
 #          validation_data=(numpy.array(data_valid), numpy.array(labels_valid)),
 #          shuffle=True)
 
-from kerastuner.tuners import RandomSearch
+#from kerastuner.tuners import RandomSearch
 
-tuner = RandomSearch(build_model, objective='val_accuracy', max_trials=1, executions_per_trial=1,
-                     directory='tuning_model')
+#tuner = RandomSearch(build_model, objective='val_accuracy', max_trials=1, executions_per_trial=1,
+#                     directory='tuning_model')
 
-tuner.search_space_summary()
+#tuner.search_space_summary()
 
-tuner.search(numpy.array(data_train),
-             numpy.array(labels_train),
-             batch_size=batch_size,
-             epochs=no_of_epochs,
-             verbose=1,
-             validation_data=(numpy.array(data_valid), numpy.array(labels_valid)))
+#tuner.search(numpy.array(data_train),
+#             numpy.array(labels_train),
+#             batch_size=batch_size,
+#             epochs=no_of_epochs,
+#             verbose=1,
+#             validation_data=(numpy.array(data_valid), numpy.array(labels_valid)))
+
+model = build_model()
+
+model.fit(numpy.array(data_train), 
+          numpy.array(labels_train), 
+          batch_size=batch_size, 
+          epochs=no_of_epochs,
+          verbose=1,
+          validation_data=(numpy.array(data_valid), numpy.array(labels_valid)),
+          shuffle=True)
