@@ -263,3 +263,6 @@ __pycache__/
 /EmotionDetection/models
 /EmotionDetection/example.png
 *.png
+
+# Manually Added
+.vscode
