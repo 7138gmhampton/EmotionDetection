@@ -1,6 +1,7 @@
-import argparse, hyper
+import argparse, hyper, numpy, os
 
 from keras.preprocessing.image import load_img, img_to_array
+from keras.models import model_from_json
 
 def acquire_model(timestamp):
     directory = hyper.MODEL_DIRECTORY
@@ -23,5 +24,13 @@ args = parser.parse_args()
 #image_size = (hyper.ROWS, hyper.COLS)
 image_to_check = load_img(args.image, color_mode='grayscale', target_size=(hyper.ROWS, hyper.COLS))
 image_array = img_to_array(image_to_check)
+image_array = numpy.asarray(image_array).squeeze()
+data_wrapper = [image_array.astype('float32')]
+checkable_data = numpy.asarray(data_wrapper)
+checkable_data = numpy.expand_dims(checkable_data, -1)
 
 # Prepare Model
+model = acquire_model(args.timestamp)
+
+print(checkable_data.shape)
+model.summary()
