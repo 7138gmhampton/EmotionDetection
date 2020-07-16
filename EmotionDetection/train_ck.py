@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 from datetime import datetime
 
 # Change Keras Backend
-#os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
+os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
 
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Flatten, Conv2D, MaxPooling2D, BatchNormalization
@@ -213,5 +213,5 @@ history = model.fit(numpy.array(data_train),
           shuffle=True)
 
 # Save Model
-save_trained_model(model, history.history['val_accuracy'][-1])
+save_trained_model(model, history.history['val_acc'][-1])
 #print(history.history['val_accuracy'][-1])
