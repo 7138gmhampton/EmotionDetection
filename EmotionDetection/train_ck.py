@@ -96,7 +96,7 @@ def save_trained_model(model, accuracy):
         text_file.write('Scale Factor: ' + '{:2d}'.format(hyper.SCALE_FACTOR) + '\n')
         text_file.write('Batch Size: ' + '{:3d}'.format(hyper.BATCH_SIZE) + '\n')
         text_file.write('No. of Epochs: ' + '{:3d}'.format(no_of_epochs) + '\n')
-        text_file.write('Dropout: ' + '{:3d}'.format(hyper.DROPOUT) + '\n')
+        text_file.write('Dropout: ' + '{:1.3f}'.format(hyper.DROPOUT) + '\n')
     model.save_weights(os.path.join(directory, weights_name))
 
     print(' -- Model Saved --')
@@ -205,15 +205,15 @@ print(' -- Test Data Saved --')
 #             validation_data=(numpy.array(data_valid), numpy.array(labels_valid)))
 
 model = build_model()
-early_stopper = EarlyStopping(monitor='val_acc', mode='max', verbose=1, patience=10, baseline=0.25)
+# early_stopper = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=10)
 history = model.fit(numpy.array(data_train), 
           numpy.array(labels_train), 
           batch_size=batch_size, 
           epochs=no_of_epochs,
           verbose=1,
           validation_data=(numpy.array(data_valid), numpy.array(labels_valid)),
-          shuffle=True,
-          callbacks=[early_stopper])
+          shuffle=True)
+        #   callbacks=[early_stopper])
 
 # Save Model
 save_trained_model(model, history.history['val_acc'][-1])
