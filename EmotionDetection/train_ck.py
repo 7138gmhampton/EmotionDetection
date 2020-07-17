@@ -13,7 +13,9 @@ from keras.losses import categorical_crossentropy
 from keras.optimizers import Adam
 from keras.regularizers import l2
 from kerastuner.engine.hyperparameters import HyperParameter
-from keras.callbacks import EarlyStopping
+from keras.callbacks import EarlyStopping, ReduceLROnPlateau
+import keras.optimizers
+import tensorflow
 
 # Command Line Parameter
 parser = argparse.ArgumentParser(description='Train CNN model with Cohn-Kanade dataset.')
@@ -76,7 +78,11 @@ def build_model():
     #model.summary()
 
     # Compile Model
-    model.compile(loss=categorical_crossentropy, optimizer=Adam(), metrics=['accuracy'])
+    # learning_schedule = tensorflow.keras.optimizers.schedules.ExponentialDecay(0.1,10000,0.96)
+    
+    model.compile(loss=categorical_crossentropy, 
+    optimizer=Adam(), 
+    metrics=['accuracy'])
 
     return model
 
@@ -206,13 +212,15 @@ print(' -- Test Data Saved --')
 
 model = build_model()
 # early_stopper = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=10)
+rate_reducer = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=5, verbose=1)
 history = model.fit(numpy.array(data_train), 
           numpy.array(labels_train), 
           batch_size=batch_size, 
           epochs=no_of_epochs,
           verbose=1,
           validation_data=(numpy.array(data_valid), numpy.array(labels_valid)),
-          shuffle=True)
+          shuffle=True,
+          callbacks=[rate_reducer])
         #   callbacks=[early_stopper])
 
 # Save Model
