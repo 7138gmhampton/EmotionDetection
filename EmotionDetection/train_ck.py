@@ -13,6 +13,7 @@ from keras.losses import categorical_crossentropy
 from keras.optimizers import Adam
 from keras.regularizers import l2
 from kerastuner.engine.hyperparameters import HyperParameter
+from keras.callbacks import EarlyStopping
 
 # Command Line Parameter
 parser = argparse.ArgumentParser(description='Train CNN model with Cohn-Kanade dataset.')
@@ -203,14 +204,15 @@ print(' -- Test Data Saved --')
 #             validation_data=(numpy.array(data_valid), numpy.array(labels_valid)))
 
 model = build_model()
-
+early_stopper = EarlyStopping(monitor='val_acc', mode='max', verbose=1, patience=10, baseline=0.25)
 history = model.fit(numpy.array(data_train), 
           numpy.array(labels_train), 
           batch_size=batch_size, 
           epochs=no_of_epochs,
           verbose=1,
           validation_data=(numpy.array(data_valid), numpy.array(labels_valid)),
-          shuffle=True)
+          shuffle=True,
+          callbacks=[early_stopper])
 
 # Save Model
 save_trained_model(model, history.history['val_acc'][-1])
