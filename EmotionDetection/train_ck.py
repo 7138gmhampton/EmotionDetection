@@ -96,6 +96,7 @@ def save_trained_model(model, accuracy):
         text_file.write('Scale Factor: ' + '{:2d}'.format(hyper.SCALE_FACTOR) + '\n')
         text_file.write('Batch Size: ' + '{:3d}'.format(hyper.BATCH_SIZE) + '\n')
         text_file.write('No. of Epochs: ' + '{:3d}'.format(no_of_epochs) + '\n')
+        text_file.write('Dropout: ' + '{:3d}'.format(hyper.DROPOUT) + '\n')
     model.save_weights(os.path.join(directory, weights_name))
 
     print(' -- Model Saved --')
