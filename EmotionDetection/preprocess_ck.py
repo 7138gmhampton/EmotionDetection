@@ -1,6 +1,7 @@
 import os, numpy, random, hyper
 
 from keras.preprocessing.image import load_img, img_to_array
+from PIL import Image
 
 import matplotlib.pyplot as pyplot
 
@@ -28,8 +29,9 @@ class ImageForCNN:
         self.image_array = image_array
         self.emotion = emotion
 
-def prepare_image_for_cnn(file, emotion_code):
+def prepare_image_for_cnn(file, emotion_code, reverse=False):
     image = load_img(file, color_mode='grayscale', target_size=image_size)
+    if reverse: image.transpose(Image.FLIP_LEFT_RIGHT)
 
     image_array = img_to_array(image)
 
@@ -42,6 +44,7 @@ def load_entire_emotion(directory, emotion_code):
     for file in os.listdir(os.fsencode(directory)):
         filename = directory + '\\' + os.fsdecode(file)
         images_of_emotion.append(prepare_image_for_cnn(filename, emotion_code))
+        images_of_emotion.append(prepare_image_for_cnn(filename, emotion_code, True))
 
     return images_of_emotion
 
@@ -137,7 +140,7 @@ print(' -- Labels saved -- ')
 # Check Output
 #pyplot.figure()
 #pyplot.imshow(trainable_data[0], interpolation='none', cmap='gray')
-for iii in range(5):
+for iii in range(1):
     pyplot.figure(iii).suptitle(indexed_labels[iii])
     pyplot.imshow(trainable_data[iii].reshape(image_size), interpolation='none', cmap='gray')
 pyplot.show()
