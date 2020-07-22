@@ -1,11 +1,11 @@
 """Prepare the Cohn-Kanade Dataset for Training"""
 import os
 import random
+from collections import namedtuple
 import numpy
 import cv2
 # import hyper
 from PIL import Image
-from collections import namedtuple
 # from face_extract import excise_face
 import matplotlib.pyplot as pyplot
 
@@ -50,20 +50,20 @@ def load_entire_emotion(directory_of_images, emotion_code):
 
     return images_of_emotion
 
-directories = [('000 neutral',0), 
-               ('001 surprise',1),
-               ('002 sadness',2),
-               ('003 fear',3),
-               ('004 anger',4),
-               ('005 disgust',5),
-               ('006 joy',6)]
+directories = [('000 neutral', 0),
+               ('001 surprise', 1),
+               ('002 sadness', 2),
+               ('003 fear', 3),
+               ('004 anger', 4),
+               ('005 disgust', 5),
+               ('006 joy', 6)]
 
 # directories = [('000 neutral',0)]
 
 prepared_images = []
 
 for directory in directories:
-    prepared_images.extend(load_entire_emotion(directory[0],directory[1]))
+    prepared_images.extend(load_entire_emotion(directory[0], directory[1]))
 
 random.shuffle(prepared_images)
 
@@ -80,20 +80,20 @@ print('Dataset Length: ' + str(len(dataset)))
 print('Dataset Entry Shape:' + str(dataset[0].shape))
 print('Dataset Entry Type: ' + str(dataset[0].dtype))
 
-trainable_data = numpy.asarray(dataset) # pylint: disable=invalid-name
-trainable_data = numpy.expand_dims(trainable_data, -1) # pylint: disable=invalid-name
+trainable_data = numpy.asarray(dataset)
+trainable_data = numpy.expand_dims(trainable_data, -1)
 print('Trainable Dataset Shape: ' + str(trainable_data.shape))
 print('Trainable Dataset Type: ' + str(trainable_data.dtype))
 numpy.save('ck_data', trainable_data)
 print(' -- Trainable data saved --')
 
 # Output Labels
-indexed_labels = numpy.asarray(indexed_labels) # pylint: disable=invalid-name
+indexed_labels = numpy.asarray(indexed_labels)
 numpy.save('ck_labels', indexed_labels)
 print(' -- Labels saved -- ')
 
 # Check Output
 for iii in range(1):
     pyplot.figure(iii).suptitle(indexed_labels[iii])
-    pyplot.imshow(trainable_data[iii].reshape((300,300)), interpolation='none', cmap='gray')
+    pyplot.imshow(trainable_data[iii].reshape((300, 300)), interpolation='none', cmap='gray')
 pyplot.show()
