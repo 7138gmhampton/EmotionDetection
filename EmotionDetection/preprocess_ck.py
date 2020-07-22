@@ -1,16 +1,23 @@
-import os, numpy, random
-import hyper
-
-os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
-
-from keras.preprocessing.image import load_img, img_to_array
+"""Prepare the Cohn-Kanade Dataset for Training"""
+import os
+import random
+import numpy
+import cv2
+# import hyper
 from PIL import Image
-from face_extract import excise_face
-from cv2 import CascadeClassifier
-
+# from face_extract import excise_face
 import matplotlib.pyplot as pyplot
 
-image_size = (hyper.ROWS, hyper.COLS)
+os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
+# pylint: disable=wrong-import-position
+from keras.preprocessing.image import load_img, img_to_array
+from face_extract import excise_face
+# import hyper
+# from PIL import Image
+# from face_extract import excise_face
+# from cv2 import CascadeClassifier
+
+# image_size = (hyper.ROWS, hyper.COLS)
 
 class ImageForCNN:
     def __init__(self, image_array, emotion):
@@ -22,8 +29,8 @@ def prepare_image_for_cnn(file, emotion_code, reverse=False):
     if reverse: image.transpose(Image.FLIP_LEFT_RIGHT)
 
     image_array = img_to_array(image)
-    face_only = excise_face(image_array, 
-        CascadeClassifier('haarcascade_frontalface_default.xml'))
+    face_only = excise_face(image_array, \
+        cv2.CascadeClassifier('haarcascade_frontalface_default.xml'))
 
     return ImageForCNN(face_only, emotion_code)
 
