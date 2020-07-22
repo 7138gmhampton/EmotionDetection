@@ -1,3 +1,11 @@
-import mtcnn
+from mtcnn.mtcnn import MTCNN
+from keras.preprocessing.image import load_img, img_to_array
 
-print(mtcnn.__version__)
+# Load an Image
+raw_image = load_img('example.png')
+
+# Extract Face
+
+# Output Result as Array
+
+# Display Result
