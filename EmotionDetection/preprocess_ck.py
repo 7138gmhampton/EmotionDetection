@@ -1,9 +1,10 @@
 import os, numpy, random
-import EmotionDetection.hyper
+import hyper
 
 from keras.preprocessing.image import load_img, img_to_array
 from PIL import Image
-from EmotionDetection.face_extract import excise_face
+from face_extract import excise_face
+from cv2 import CascadeClassifier
 
 import matplotlib.pyplot as pyplot
 
@@ -32,13 +33,16 @@ class ImageForCNN:
         self.emotion = emotion
 
 def prepare_image_for_cnn(file, emotion_code, reverse=False):
-    image = load_img(file, color_mode='grayscale', target_size=image_size)
+    image = load_img(file, color_mode='grayscale', target_size=None)
     if reverse: image.transpose(Image.FLIP_LEFT_RIGHT)
 
     image_array = img_to_array(image)
+    face_only = excise_face(image_array, 
+        CascadeClassifier('haarcascade_frontalface_default.xml'))
+    # print(face_only.shape)
 
     #return (image_array, emotion_code)
-    return ImageForCNN(image_array, emotion_code)
+    return ImageForCNN(face_only, emotion_code)
 
 def load_entire_emotion(directory, emotion_code):
     images_of_emotion = []
@@ -46,7 +50,7 @@ def load_entire_emotion(directory, emotion_code):
     for file in os.listdir(os.fsencode(directory)):
         filename = directory + '\\' + os.fsdecode(file)
         images_of_emotion.append(prepare_image_for_cnn(filename, emotion_code))
-        images_of_emotion.append(prepare_image_for_cnn(filename, emotion_code, True))
+        # images_of_emotion.append(prepare_image_for_cnn(filename, emotion_code, True))
 
     return images_of_emotion
 
@@ -66,22 +70,22 @@ def load_entire_emotion(directory, emotion_code):
 #pyplot.imshow(images[0].image_array.reshape((490,640)), interpolation='none', cmap='gray')
 #pyplot.show()
 
-directories = [('000 neutral',0), 
-               ('001 surprise',1),
-               ('002 sadness',2),
-               ('003 fear',3),
-               ('004 anger',4),
-               ('005 disgust',5),
-               ('006 joy',6)]
+# directories = [('000 neutral',0), 
+#                ('001 surprise',1),
+#                ('002 sadness',2),
+#                ('003 fear',3),
+#                ('004 anger',4),
+#                ('005 disgust',5),
+#                ('006 joy',6)]
 
-#directories = [('000 neutral',0)]
+directories = [('000 neutral',0)]
 
 prepared_images = []
 
 for directory in directories:
     prepared_images.extend(load_entire_emotion(directory[0],directory[1]))
 
-random.shuffle(prepared_images)
+# random.shuffle(prepared_images)
 
 #pyplot.figure()
 #pyplot.imshow(prepared_images[-1].image_array.reshape((490,640)), interpolation='none', cmap='gray')
@@ -95,7 +99,7 @@ for prepared_image in prepared_images:
     #dataset.append(prepared_image.image_array)
     #image_array = prepared_image.image_array.reshape(490,640)
     #image_array = numpy.delete(image_array,2,1)
-    image_array = numpy.asarray(prepared_image.image_array).squeeze()
+    image_array = numpy.asarray(prepared_image.image_array)
     #image_array = image_array.astype('float32')
     #image_array = numpy.expand_dims(prepared_image.image_array, 0)
     #image_array = numpy.expand_dims(image_array, 0)
@@ -107,9 +111,9 @@ for prepared_image in prepared_images:
 #pyplot.show()
 
 # Output Trainable Data as Array
-print(len(dataset))
-print(dataset[0].shape)
-print(dataset[0].dtype)
+print('Dataset Length: ' + str(len(dataset)))
+print('Dataset Entry Shape:' + str(dataset[0].shape))
+print('Dataset Entry Type: ' + str(dataset[0].dtype))
 #print(dataset[0])
 #dataset = numpy.asarray(dataset)
 #dataset = numpy.stack(dataset)
@@ -128,8 +132,8 @@ print(dataset[0].dtype)
 #    trainable_data = numpy.append(trainable_data, appending_array,0)
 trainable_data = numpy.asarray(dataset)
 trainable_data = numpy.expand_dims(trainable_data, -1)
-print(trainable_data.shape)
-print(trainable_data.dtype)
+print('Trainable Dataset Shape: ' + str(trainable_data.shape))
+print('Trainable Dataset Type: ' + str(trainable_data.dtype))
 #print(trainable_data)
 numpy.save('ck_data', trainable_data)
 print(' -- Trainable data saved --')
@@ -144,5 +148,5 @@ print(' -- Labels saved -- ')
 #pyplot.imshow(trainable_data[0], interpolation='none', cmap='gray')
 for iii in range(1):
     pyplot.figure(iii).suptitle(indexed_labels[iii])
-    pyplot.imshow(trainable_data[iii].reshape(image_size), interpolation='none', cmap='gray')
+    pyplot.imshow(trainable_data[iii].reshape((300,300)), interpolation='none', cmap='gray')
 pyplot.show()
