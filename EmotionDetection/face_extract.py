@@ -9,7 +9,7 @@ from cv2 import CascadeClassifier
 
 def excise_face(image_array, classifier):
     int_array = image_array.astype(numpy.uint8)
-    faces = classifier.detectMultiScale(int_array, 1.3, 5)
+    faces = classifier.detectMultiScale(int_array, 1.3, 0)
 
     x_start, y_start, width, height = faces[0]
     x_end, y_end = x_start + width, y_start + height
