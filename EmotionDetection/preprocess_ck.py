@@ -1,6 +1,8 @@
 import os, numpy, random
 import hyper
 
+os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
+
 from keras.preprocessing.image import load_img, img_to_array
 from PIL import Image
 from face_extract import excise_face
@@ -50,7 +52,7 @@ def load_entire_emotion(directory, emotion_code):
     for file in os.listdir(os.fsencode(directory)):
         filename = directory + '\\' + os.fsdecode(file)
         images_of_emotion.append(prepare_image_for_cnn(filename, emotion_code))
-        # images_of_emotion.append(prepare_image_for_cnn(filename, emotion_code, True))
+        images_of_emotion.append(prepare_image_for_cnn(filename, emotion_code, True))
 
     return images_of_emotion
 
@@ -70,22 +72,22 @@ def load_entire_emotion(directory, emotion_code):
 #pyplot.imshow(images[0].image_array.reshape((490,640)), interpolation='none', cmap='gray')
 #pyplot.show()
 
-# directories = [('000 neutral',0), 
-#                ('001 surprise',1),
-#                ('002 sadness',2),
-#                ('003 fear',3),
-#                ('004 anger',4),
-#                ('005 disgust',5),
-#                ('006 joy',6)]
+directories = [('000 neutral',0), 
+               ('001 surprise',1),
+               ('002 sadness',2),
+               ('003 fear',3),
+               ('004 anger',4),
+               ('005 disgust',5),
+               ('006 joy',6)]
 
-directories = [('000 neutral',0)]
+# directories = [('000 neutral',0)]
 
 prepared_images = []
 
 for directory in directories:
     prepared_images.extend(load_entire_emotion(directory[0],directory[1]))
 
-# random.shuffle(prepared_images)
+random.shuffle(prepared_images)
 
 #pyplot.figure()
 #pyplot.imshow(prepared_images[-1].image_array.reshape((490,640)), interpolation='none', cmap='gray')
