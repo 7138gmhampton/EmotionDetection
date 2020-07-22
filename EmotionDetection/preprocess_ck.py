@@ -4,26 +4,13 @@ import random
 from collections import namedtuple
 import numpy
 import cv2
-# import hyper
 from PIL import Image
-# from face_extract import excise_face
 import matplotlib.pyplot as pyplot
 
 os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
 # pylint: disable=wrong-import-position
 from keras.preprocessing.image import load_img, img_to_array
 from face_extract import excise_face
-# import hyper
-# from PIL import Image
-# from face_extract import excise_face
-# from cv2 import CascadeClassifier
-
-# image_size = (hyper.ROWS, hyper.COLS)
-
-# class ImageForCNN:
-#     def __init__(self, image_array, emotion):
-#         self.image_array = image_array
-#         self.emotion = emotion
 
 TrainableImage = namedtuple('TrainableImage', ['image_array', 'emotion'])
 
@@ -36,7 +23,6 @@ def prepare_image_for_cnn(file, emotion_code, reverse=False):
     face_only = excise_face(image_as_array, \
         cv2.CascadeClassifier('haarcascade_frontalface_default.xml'))
 
-    # return ImageForCNN(face_only, emotion_code)
     return TrainableImage(face_only, emotion_code)
 
 def load_entire_emotion(directory_of_images, emotion_code):
@@ -57,8 +43,6 @@ directories = [('000 neutral', 0),
                ('004 anger', 4),
                ('005 disgust', 5),
                ('006 joy', 6)]
-
-# directories = [('000 neutral',0)]
 
 prepared_images = []
 
