@@ -7,9 +7,25 @@ from cv2 import CascadeClassifier
 
 # print(cv2.__version__)
 
+def display_face(source_image, face, index):
+    x_start, y_start, width, height = face
+    x_end, y_end = x_start + width, y_start + height
+
+    display = source_image[y_start:y_end, x_start:x_end]
+
+    cv2.imshow('multiface'+ str(index), display)
+
 def excise_face(image_array, classifier):
     int_array = image_array.astype(numpy.uint8)
-    faces = classifier.detectMultiScale(int_array, 1.3, 0, minSize=(100,100))
+    faces = classifier.detectMultiScale(int_array, 1.1, 5, minSize=(200,200), maxSize=(350,350))
+    # print('No of faces detected: ' + str(len(faces)))
+    if len(faces) != 1:
+        print('No of faces detected: ' + str(len(faces)))
+    if len(faces) > 1: 
+        # print('No of faces detected: ' + str(len(faces)))
+        display_face(int_array, faces[0], 0)
+        display_face(int_array, faces[1], 1)
+        cv2.waitKey()
 
     x_start, y_start, width, height = faces[0]
     x_end, y_end = x_start + width, y_start + height
