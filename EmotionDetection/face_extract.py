@@ -1,13 +1,16 @@
-import numpy, cv2
+"""Employs OpenCV API to extract faces from given images"""
+import numpy
+import cv2
 
-from mtcnn.mtcnn import MTCNN
-from keras.preprocessing.image import load_img, img_to_array
-from matplotlib import pyplot
-from cv2 import CascadeClassifier
+# from mtcnn.mtcnn import MTCNN
+# from keras.preprocessing.image import load_img, img_to_array
+# from matplotlib import pyplot
+# from cv2 import CascadeClassifier
 
 # print(cv2.__version__)
 
 def display_face(source_image, face, index):
+    """Display an excise \'face\'"""
     x_start, y_start, width, height = face
     x_end, y_end = x_start + width, y_start + height
 
@@ -16,12 +19,13 @@ def display_face(source_image, face, index):
     cv2.imshow('multiface'+ str(index), display)
 
 def excise_face(image_array, classifier):
+    """Detect face and crop image to that alone"""
     int_array = image_array.astype(numpy.uint8)
-    faces = classifier.detectMultiScale(int_array, 1.1, 5, minSize=(200,200), maxSize=(350,350))
+    faces = classifier.detectMultiScale(int_array, 1.1, 5, minSize=(200, 200), maxSize=(350, 350))
     # print('No of faces detected: ' + str(len(faces)))
     if len(faces) != 1:
         print('No of faces detected: ' + str(len(faces)))
-    if len(faces) > 1: 
+    if len(faces) > 1:
         # print('No of faces detected: ' + str(len(faces)))
         display_face(int_array, faces[0], 0)
         display_face(int_array, faces[1], 1)
@@ -30,7 +34,7 @@ def excise_face(image_array, classifier):
     x_start, y_start, width, height = faces[0]
     x_end, y_end = x_start + width, y_start + height
     output = int_array[y_start:y_end, x_start:x_end]
-    output = cv2.resize(output, (300,300))
+    output = cv2.resize(output, (300, 300))
 
     return output.astype(numpy.float32)
 
