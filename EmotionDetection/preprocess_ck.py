@@ -1,7 +1,9 @@
-import os, numpy, random, hyper
+import os, numpy, random
+import EmotionDetection.hyper
 
 from keras.preprocessing.image import load_img, img_to_array
 from PIL import Image
+from EmotionDetection.face_extract import excise_face
 
 import matplotlib.pyplot as pyplot
 
