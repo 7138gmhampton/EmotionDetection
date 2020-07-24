@@ -7,7 +7,7 @@ from hyper import FACE_BOUND_SCALED
 
 # Change Keras Backend
 os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
-
+from model_builders import build_shanks
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Flatten, Conv2D, MaxPooling2D, BatchNormalization
 from keras.losses import categorical_crossentropy
@@ -212,7 +212,7 @@ print(' -- Test Data Saved --')
 #             verbose=1,
 #             validation_data=(numpy.array(data_valid), numpy.array(labels_valid)))
 
-build = build_model
+build = build_shanks
 model = build()
 early_stopper = EarlyStopping(monitor='val_loss', mode='max', verbose=1, patience=20, min_delta=0.001)
 rate_reducer = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=5, verbose=1)
