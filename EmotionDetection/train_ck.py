@@ -89,13 +89,13 @@ rows, cols = hyper.ROWS, hyper.COLS
 #     return model
 
 def plot_training(plotting_history, plot_filename):
-    figure, (axis_loss, axis_accuracy) = pyplot.subplots(2, 1)
+    figure, (axis_loss, axis_accuracy) = pyplot.subplots(2, 1, sharex=True)
     pyplot.subplots_adjust(wspace=0.5)
 
     axis_loss.plot(plotting_history['loss'], label='training')
     axis_loss.plot(plotting_history['val_loss'], label='validation')
-    axis_loss.xaxis.set_major_locator(MaxNLocator(integer=True))
-    axis_loss.set(xlabel='Epoch', ylabel='Loss')
+    # axis_loss.xaxis.set_major_locator(MaxNLocator(integer=True))
+    axis_loss.set(ylabel='Loss')
 
     axis_accuracy.plot(plotting_history['acc'], label='training')
     axis_accuracy.plot(plotting_history['val_acc'], label='validation')
@@ -104,7 +104,7 @@ def plot_training(plotting_history, plot_filename):
     axis_accuracy.set(xlabel='Epoch', ylabel='Accuracy(%)')
 
     # pyplot.show()
-    pyplot.savefig(plot_filename)
+    figure.savefig(plot_filename)
 
 def save_trained_model(model, training_history):
     directory = 'models'
