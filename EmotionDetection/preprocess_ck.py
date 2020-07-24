@@ -6,6 +6,7 @@ import numpy
 import cv2
 from PIL import Image
 import matplotlib.pyplot as pyplot
+from hyper import FACE_SIZE
 
 os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
 # pylint: disable=wrong-import-position
@@ -79,5 +80,6 @@ print(' -- Labels saved -- ')
 # Check Output
 for iii in range(1):
     pyplot.figure(iii).suptitle(indexed_labels[iii])
-    pyplot.imshow(trainable_data[iii].reshape((300, 300)), interpolation='none', cmap='gray')
+    pyplot.imshow(trainable_data[iii].reshape(FACE_SIZE), interpolation='none',\
+        cmap='gray')
 pyplot.show()
