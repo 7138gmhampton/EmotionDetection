@@ -9,14 +9,14 @@ import numpy
 
 os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
 # pylint: disable=wrong-import-position
-from keras.models import Sequential
-from keras.losses import categorical_crossentropy
-from keras.optimizers import Adam
-from keras.regularizers import l2
+# from keras.models import Sequential
+# from keras.losses import categorical_crossentropy
+# from keras.optimizers import Adam
+# from keras.regularizers import l2
 from keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from model_builders import build_shanks
 import hyper
-from hyper import FACE_BOUND_SCALED
+# from hyper import FACE_BOUND_SCALED
 
 # Command Line Parameter
 parser = argparse.ArgumentParser(description='Train CNN model with Cohn-Kanade dataset.')
