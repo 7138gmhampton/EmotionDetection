@@ -1,3 +1,5 @@
+"""Contains constants and hyperparameters for the training of the Facial \
+    Expression Recognition classifier"""
 MODEL_DIRECTORY = 'models'
 
 IMAGE_HEIGHT = 490
