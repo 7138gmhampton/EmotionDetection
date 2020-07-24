@@ -6,21 +6,21 @@ from datetime import datetime
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as pyplot
 import numpy
-import hyper
-from hyper import FACE_BOUND_SCALED
 
-# Change Keras Backend
 os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
-from model_builders import build_shanks
+# pylint: disable=wrong-import-position
 from keras.models import Sequential
-from keras.layers import Dense, Dropout, Activation, Flatten, Conv2D, MaxPooling2D, BatchNormalization
+# from keras.layers import Dense, Dropout, Activation, Flatten, Conv2D, MaxPooling2D, BatchNormalization
 from keras.losses import categorical_crossentropy
 from keras.optimizers import Adam
 from keras.regularizers import l2
-from kerastuner.engine.hyperparameters import HyperParameter
+# from kerastuner.engine.hyperparameters import HyperParameter
 from keras.callbacks import EarlyStopping, ReduceLROnPlateau
-import keras.optimizers
-import tensorflow
+# import keras.optimizers
+# import tensorflow
+from model_builders import build_shanks
+import hyper
+from hyper import FACE_BOUND_SCALED
 
 # Command Line Parameter
 parser = argparse.ArgumentParser(description='Train CNN model with Cohn-Kanade dataset.')
