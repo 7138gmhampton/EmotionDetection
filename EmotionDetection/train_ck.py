@@ -88,24 +88,44 @@ rows, cols = hyper.ROWS, hyper.COLS
 
 #     return model
 
-def save_trained_model(model, accuracy, validation_accuracy):
+def plot_training(plotting_history, plot_filename):
+    figure, (axis_loss, axis_accuracy) = pyplot.subplots(2, 1)
+    pyplot.subplots_adjust(wspace=0.5)
+
+    axis_loss.plot(plotting_history['loss'], label='training')
+    axis_loss.plot(plotting_history['val_loss'], label='validation')
+    axis_loss.xaxis.set_major_locator(MaxNLocator(integer=True))
+    axis_loss.set(xlabel='Epoch', ylabel='Loss')
+
+    axis_accuracy.plot(plotting_history['acc'], label='training')
+    axis_accuracy.plot(plotting_history['val_acc'], label='validation')
+    axis_accuracy.xaxis.set_major_locator(MaxNLocator(integer=True))
+    axis_accuracy.yaxis.set_major_formatter(PercentFormatter(xmax=1.0))
+    axis_accuracy.set(xlabel='Epoch', ylabel='Accuracy(%)')
+
+    # pyplot.show()
+    pyplot.savefig(plot_filename)
+
+def save_trained_model(model, training_history):
     directory = 'models'
     timestamp = datetime.now().strftime('%Y%m%d-%H%M')
     model_name = timestamp + '_model.json'
     weights_name = timestamp + '_weights.h5'
     details_name = timestamp + '_details.txt'
+    graph_name = timestamp + '_training.png'
 
     model_json = model.to_json()
     with open(os.path.join(directory, model_name),'w') as json_file:
         json_file.write(model_json)
     with open(os.path.join(directory, details_name), 'w') as text_file:
-        text_file.write('Training Accuracy: ' + '{:1.3f}'.format(accuracy) + '\n')
-        text_file.write('Validation Accuracy: ' + '{:1.3f}'.format(validation_accuracy) + '\n')
+        text_file.write('Training Accuracy: ' + '{:1.3f}'.format(training_history['acc'][-1]) + '\n')
+        text_file.write('Validation Accuracy: ' + '{:1.3f}'.format(training_history['val_acc'][-1]) + '\n')
         text_file.write('Scale Factor: ' + '{:2d}'.format(hyper.SCALE_FACTOR) + '\n')
         text_file.write('Batch Size: ' + '{:3d}'.format(hyper.BATCH_SIZE) + '\n')
         text_file.write('No. of Epochs: ' + '{:3d}'.format(no_of_epochs) + '\n')
         text_file.write('Dropout: ' + '{:1.3f}'.format(hyper.DROPOUT) + '\n')
     model.save_weights(os.path.join(directory, weights_name))
+    plot_training(training_history, os.path.join(directory, graph_name))
 
     print(' -- Model Saved --')
 
@@ -145,21 +165,21 @@ training = model.fit(numpy.array(data_train),
           callbacks=[rate_reducer])
 
 # Save Model
-save_trained_model(model, training.history['acc'][-1], training.history['val_acc'][-1])
+save_trained_model(model, training.history)
 
 # Plot Training History
-figure, (axis_loss, axis_accuracy) = pyplot.subplots(1, 2)
-pyplot.subplots_adjust(wspace=0.5)
+# figure, (axis_loss, axis_accuracy) = pyplot.subplots(1, 2)
+# pyplot.subplots_adjust(wspace=0.5)
 
-axis_loss.plot(training.history['loss'], label='training')
-axis_loss.plot(training.history['val_loss'], label='validation')
-axis_loss.xaxis.set_major_locator(MaxNLocator(integer=True))
-axis_loss.set(xlabel='Epoch', ylabel='Loss')
+# axis_loss.plot(training.history['loss'], label='training')
+# axis_loss.plot(training.history['val_loss'], label='validation')
+# axis_loss.xaxis.set_major_locator(MaxNLocator(integer=True))
+# axis_loss.set(xlabel='Epoch', ylabel='Loss')
 
-axis_accuracy.plot(training.history['acc'], label='training')
-axis_accuracy.plot(training.history['val_acc'], label='validation')
-axis_accuracy.xaxis.set_major_locator(MaxNLocator(integer=True))
-axis_accuracy.yaxis.set_major_formatter(PercentFormatter(xmax=1.0))
-axis_accuracy.set(xlabel='Epoch', ylabel='Accuracy(%)')
+# axis_accuracy.plot(training.history['acc'], label='training')
+# axis_accuracy.plot(training.history['val_acc'], label='validation')
+# axis_accuracy.xaxis.set_major_locator(MaxNLocator(integer=True))
+# axis_accuracy.yaxis.set_major_formatter(PercentFormatter(xmax=1.0))
+# axis_accuracy.set(xlabel='Epoch', ylabel='Accuracy(%)')
 
-pyplot.show()
+# pyplot.show()
