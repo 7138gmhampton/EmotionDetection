@@ -87,7 +87,7 @@ def build_model():
 
     return model
 
-def save_trained_model(model, accuracy):
+def save_trained_model(model, accuracy, validation_accuracy):
     #now = datetime.now()
     directory = 'models'
     timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M')
@@ -99,7 +99,8 @@ def save_trained_model(model, accuracy):
     with open(os.path.join(directory, model_name),'w') as json_file:
         json_file.write(model_json)
     with open(os.path.join(directory, details_name), 'w') as text_file:
-        text_file.write('Accuracy: ' + '{:1.3f}'.format(accuracy) + '\n')
+        text_file.write('Training Accuracy: ' + '{:1.3f}'.format(accuracy) + '\n')
+        text_file.write('Validation Accuracy: ' + '{:1.3f}'.format(validation_accuracy) + '\n')
         text_file.write('Scale Factor: ' + '{:2d}'.format(hyper.SCALE_FACTOR) + '\n')
         text_file.write('Batch Size: ' + '{:3d}'.format(hyper.BATCH_SIZE) + '\n')
         text_file.write('No. of Epochs: ' + '{:3d}'.format(no_of_epochs) + '\n')
@@ -225,5 +226,5 @@ history = model.fit(numpy.array(data_train),
         #   callbacks=[early_stopper])
 
 # Save Model
-save_trained_model(model, history.history['val_acc'][-1])
+save_trained_model(model, history.history['acc'][-1], history.history['val_acc'][-1])
 #print(history.history['val_accuracy'][-1])
