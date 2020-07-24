@@ -1,6 +1,7 @@
 """Employs OpenCV API to extract faces from given images"""
 import numpy
 import cv2
+import hyper
 
 def display_face(source_image, face, index):
     """Display an excise \'face\'"""
@@ -25,6 +26,6 @@ def excise_face(image_array, classifier):
     x_start, y_start, width, height = faces[0]
     x_end, y_end = x_start + width, y_start + height
     output = int_array[y_start:y_end, x_start:x_end]
-    output = cv2.resize(output, (300, 300))
+    output = cv2.resize(output, (hyper.FACE_BOUND_SCALED, hyper.FACE_BOUND_SCALED))
 
     return output.astype(numpy.float32)
