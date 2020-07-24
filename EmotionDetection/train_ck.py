@@ -1,3 +1,4 @@
+"""Train a model on the preprocessed Cohn-Kanade Dataset and save that model"""
 import numpy, hyper, os, sys, argparse
 import matplotlib.pyplot as pyplot
 
