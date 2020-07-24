@@ -15,7 +15,8 @@ def display_face(source_image, face, index):
 def excise_face(image_array, classifier):
     """Detect face and crop image to that alone"""
     int_array = image_array.astype(numpy.uint8)
-    faces = classifier.detectMultiScale(int_array, 1.1, 5, minSize=(200, 200), maxSize=(350, 350))
+    faces = classifier.detectMultiScale(int_array, 1.1, 5, minSize=(200, 200),\
+        maxSize=(350, 350))
     if len(faces) != 1:
         print('No of faces detected: ' + str(len(faces)))
     if len(faces) > 1:
