@@ -5,7 +5,7 @@ import argparse
 from datetime import datetime
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as pyplot
-from matplotlib.ticker import MaxNLocator
+from matplotlib.ticker import MaxNLocator, PercentFormatter
 import numpy
 
 os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
@@ -148,7 +148,18 @@ history = model.fit(numpy.array(data_train),
 save_trained_model(model, history.history['acc'][-1], history.history['val_acc'][-1])
 
 # Plot Training History
-figure, axis_loss = pyplot.subplots()
-axis_loss.plot(history.history['loss'])
+figure, (axis_loss, axis_accuracy) = pyplot.subplots(1, 2)
+pyplot.subplots_adjust(wspace=0.5)
+
+axis_loss.plot(history.history['loss'], label='training')
+axis_loss.plot(history.history['val_loss'], label='validation')
 axis_loss.xaxis.set_major_locator(MaxNLocator(integer=True))
+axis_loss.set(xlabel='Epoch', ylabel='Loss')
+
+axis_accuracy.plot(history.history['acc'], label='training')
+axis_accuracy.plot(history.history['val_acc'], label='validation')
+axis_accuracy.xaxis.set_major_locator(MaxNLocator(integer=True))
+axis_accuracy.yaxis.set_major_formatter(PercentFormatter(xmax=1.0))
+axis_accuracy.set(xlabel='Epoch', ylabel='Accuracy(%)')
+
 pyplot.show()
