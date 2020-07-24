@@ -3,6 +3,7 @@ import matplotlib.pyplot as pyplot
 
 from sklearn.model_selection import train_test_split
 from datetime import datetime
+from hyper import FACE_BOUND_SCALED
 
 # Change Keras Backend
 os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
@@ -37,7 +38,7 @@ def build_model():
     features_from_filters = no_of_features
     
     model.add(Conv2D(features_from_filters, kernel_size=(3, 3), activation='relu', 
-        input_shape=(rows, cols, 1), data_format='channels_last', kernel_regularizer=l2(0.01)))
+        input_shape=(FACE_BOUND_SCALED, FACE_BOUND_SCALED, 1), data_format='channels_last', kernel_regularizer=l2(0.01)))
     model.add(Conv2D(features_from_filters, kernel_size=(3, 3), activation='relu', padding='same'))
     model.add(BatchNormalization())
     model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
@@ -211,7 +212,7 @@ print(' -- Test Data Saved --')
 #             validation_data=(numpy.array(data_valid), numpy.array(labels_valid)))
 
 model = build_model()
-early_stopper = EarlyStopping(monitor='acc', mode='max', verbose=1, patience=20, min_delta=0.001)
+early_stopper = EarlyStopping(monitor='val_loss', mode='max', verbose=1, patience=20, min_delta=0.001)
 rate_reducer = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=5, verbose=1)
 history = model.fit(numpy.array(data_train), 
           numpy.array(labels_train), 
@@ -220,7 +221,7 @@ history = model.fit(numpy.array(data_train),
           verbose=1,
           validation_data=(numpy.array(data_valid), numpy.array(labels_valid)),
           shuffle=True,
-          callbacks=[rate_reducer, early_stopper])
+          callbacks=[rate_reducer])
         #   callbacks=[early_stopper])
 
 # Save Model
