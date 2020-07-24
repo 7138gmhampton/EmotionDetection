@@ -1,7 +1,6 @@
 """Train a model on the preprocessed Cohn-Kanade Dataset and save that model"""
 import os
 import argparse
-# import sys
 from datetime import datetime
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as pyplot
@@ -11,14 +10,10 @@ import numpy
 os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
 # pylint: disable=wrong-import-position
 from keras.models import Sequential
-# from keras.layers import Dense, Dropout, Activation, Flatten, Conv2D, MaxPooling2D, BatchNormalization
 from keras.losses import categorical_crossentropy
 from keras.optimizers import Adam
 from keras.regularizers import l2
-# from kerastuner.engine.hyperparameters import HyperParameter
 from keras.callbacks import EarlyStopping, ReduceLROnPlateau
-# import keras.optimizers
-# import tensorflow
 from model_builders import build_shanks
 import hyper
 from hyper import FACE_BOUND_SCALED
@@ -35,66 +30,12 @@ batch_size = hyper.BATCH_SIZE
 no_of_epochs = args.epochs
 rows, cols = hyper.ROWS, hyper.COLS
 
-# def build_model():
-#     model = Sequential()
-
-#     features_from_filters = no_of_features
-    
-#     model.add(Conv2D(features_from_filters, kernel_size=(3, 3), activation='relu', 
-#         input_shape=(FACE_BOUND_SCALED, FACE_BOUND_SCALED, 1), data_format='channels_last', kernel_regularizer=l2(0.01)))
-#     model.add(Conv2D(features_from_filters, kernel_size=(3, 3), activation='relu', padding='same'))
-#     model.add(BatchNormalization())
-#     model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-#     model.add(Dropout(hyper.DROPOUT))
-
-#     model.add(Conv2D(2*features_from_filters, kernel_size=(3, 3), activation='relu', padding='same'))
-#     model.add(BatchNormalization())
-#     model.add(Conv2D(2*features_from_filters, kernel_size=(3, 3), activation='relu', padding='same'))
-#     model.add(BatchNormalization())
-#     model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-#     model.add(Dropout(hyper.DROPOUT))
-
-#     model.add(Conv2D(2*2*features_from_filters, kernel_size=(3, 3), activation='relu', padding='same'))
-#     model.add(BatchNormalization())
-#     model.add(Conv2D(2*2*features_from_filters, kernel_size=(3, 3), activation='relu', padding='same'))
-#     model.add(BatchNormalization())
-#     model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-#     model.add(Dropout(hyper.DROPOUT))
-
-#     model.add(Conv2D(2*2*2*features_from_filters, kernel_size=(3, 3), activation='relu', padding='same'))
-#     model.add(BatchNormalization())
-#     model.add(Conv2D(2*2*2*features_from_filters, kernel_size=(3, 3), activation='relu', padding='same'))
-#     model.add(BatchNormalization())
-#     model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-#     model.add(Dropout(hyper.DROPOUT))
-
-#     model.add(Flatten())
-
-#     model.add(Dense(2*2*2*features_from_filters, activation='relu'))
-#     model.add(Dropout(hyper.DROPOUT))
-#     model.add(Dense(2*2*features_from_filters, activation='relu'))
-#     model.add(Dropout(hyper.DROPOUT))
-#     model.add(Dense(2*features_from_filters, activation='relu'))
-#     model.add(Dropout(hyper.DROPOUT))
-
-#     model.add(Dense(no_of_labels, activation='softmax'))
-
-
-#     # Compile Model
-    
-#     model.compile(loss=categorical_crossentropy, 
-#     optimizer=Adam(), 
-#     metrics=['accuracy'])
-
-#     return model
-
 def plot_training(plotting_history, plot_filename):
     figure, (axis_loss, axis_accuracy) = pyplot.subplots(2, 1, sharex=True)
     pyplot.subplots_adjust(wspace=0.5)
 
     axis_loss.plot(plotting_history['loss'], label='training')
     axis_loss.plot(plotting_history['val_loss'], label='validation')
-    # axis_loss.xaxis.set_major_locator(MaxNLocator(integer=True))
     axis_loss.set(ylabel='Loss')
 
     axis_accuracy.plot(plotting_history['acc'], label='training')
@@ -103,7 +44,6 @@ def plot_training(plotting_history, plot_filename):
     axis_accuracy.yaxis.set_major_formatter(PercentFormatter(xmax=1.0))
     axis_accuracy.set(xlabel='Epoch', ylabel='Accuracy(%)')
 
-    # pyplot.show()
     figure.savefig(plot_filename)
 
 def save_trained_model(model, training_history):
@@ -166,20 +106,3 @@ training = model.fit(numpy.array(data_train),
 
 # Save Model
 save_trained_model(model, training.history)
-
-# Plot Training History
-# figure, (axis_loss, axis_accuracy) = pyplot.subplots(1, 2)
-# pyplot.subplots_adjust(wspace=0.5)
-
-# axis_loss.plot(training.history['loss'], label='training')
-# axis_loss.plot(training.history['val_loss'], label='validation')
-# axis_loss.xaxis.set_major_locator(MaxNLocator(integer=True))
-# axis_loss.set(xlabel='Epoch', ylabel='Loss')
-
-# axis_accuracy.plot(training.history['acc'], label='training')
-# axis_accuracy.plot(training.history['val_acc'], label='validation')
-# axis_accuracy.xaxis.set_major_locator(MaxNLocator(integer=True))
-# axis_accuracy.yaxis.set_major_formatter(PercentFormatter(xmax=1.0))
-# axis_accuracy.set(xlabel='Epoch', ylabel='Accuracy(%)')
-
-# pyplot.show()
