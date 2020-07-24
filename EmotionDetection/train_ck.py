@@ -1,13 +1,12 @@
 """Train a model on the preprocessed Cohn-Kanade Dataset and save that model"""
+import os
+import argparse
+# import sys
+from datetime import datetime
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as pyplot
 import numpy
 import hyper
-import os
-import sys
-import argparse
-import matplotlib.pyplot as pyplot
-
-from sklearn.model_selection import train_test_split
-from datetime import datetime
 from hyper import FACE_BOUND_SCALED
 
 # Change Keras Backend
