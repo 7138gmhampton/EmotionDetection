@@ -90,7 +90,7 @@ def build_model():
 def save_trained_model(model, accuracy, validation_accuracy):
     #now = datetime.now()
     directory = 'models'
-    timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M')
+    timestamp = datetime.now().strftime('%Y%m%d-%H%M')
     model_name = timestamp + '_model.json'
     weights_name = timestamp + '_weights.h5'
     details_name = timestamp + '_details.txt'
