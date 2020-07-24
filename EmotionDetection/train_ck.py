@@ -212,7 +212,8 @@ print(' -- Test Data Saved --')
 #             verbose=1,
 #             validation_data=(numpy.array(data_valid), numpy.array(labels_valid)))
 
-model = build_model()
+build = build_model
+model = build()
 early_stopper = EarlyStopping(monitor='val_loss', mode='max', verbose=1, patience=20, min_delta=0.001)
 rate_reducer = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=5, verbose=1)
 history = model.fit(numpy.array(data_train), 
