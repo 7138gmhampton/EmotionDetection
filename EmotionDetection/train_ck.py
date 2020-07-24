@@ -5,6 +5,7 @@ import argparse
 from datetime import datetime
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as pyplot
+from matplotlib.ticker import MaxNLocator
 import numpy
 
 os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
@@ -148,5 +149,6 @@ save_trained_model(model, history.history['acc'][-1], history.history['val_acc']
 
 # Plot Training History
 figure, axis_loss = pyplot.subplots()
-axis_loss.plot(history.history['acc'])
+axis_loss.plot(history.history['loss'])
+axis_loss.xaxis.set_major_locator(MaxNLocator(integer=True))
 pyplot.show()
