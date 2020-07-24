@@ -1,5 +1,9 @@
 """Train a model on the preprocessed Cohn-Kanade Dataset and save that model"""
-import numpy, hyper, os, sys, argparse
+import numpy
+import hyper
+import os
+import sys
+import argparse
 import matplotlib.pyplot as pyplot
 
 from sklearn.model_selection import train_test_split
