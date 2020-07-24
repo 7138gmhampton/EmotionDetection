@@ -135,7 +135,7 @@ build = build_shanks
 model = build()
 early_stopper = EarlyStopping(monitor='val_loss', mode='max', verbose=1, patience=20, min_delta=0.001)
 rate_reducer = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=5, verbose=1)
-history = model.fit(numpy.array(data_train), 
+training = model.fit(numpy.array(data_train), 
           numpy.array(labels_train), 
           batch_size=batch_size, 
           epochs=no_of_epochs,
@@ -145,19 +145,19 @@ history = model.fit(numpy.array(data_train),
           callbacks=[rate_reducer])
 
 # Save Model
-save_trained_model(model, history.history['acc'][-1], history.history['val_acc'][-1])
+save_trained_model(model, training.history['acc'][-1], training.history['val_acc'][-1])
 
 # Plot Training History
 figure, (axis_loss, axis_accuracy) = pyplot.subplots(1, 2)
 pyplot.subplots_adjust(wspace=0.5)
 
-axis_loss.plot(history.history['loss'], label='training')
-axis_loss.plot(history.history['val_loss'], label='validation')
+axis_loss.plot(training.history['loss'], label='training')
+axis_loss.plot(training.history['val_loss'], label='validation')
 axis_loss.xaxis.set_major_locator(MaxNLocator(integer=True))
 axis_loss.set(xlabel='Epoch', ylabel='Loss')
 
-axis_accuracy.plot(history.history['acc'], label='training')
-axis_accuracy.plot(history.history['val_acc'], label='validation')
+axis_accuracy.plot(training.history['acc'], label='training')
+axis_accuracy.plot(training.history['val_acc'], label='validation')
 axis_accuracy.xaxis.set_major_locator(MaxNLocator(integer=True))
 axis_accuracy.yaxis.set_major_formatter(PercentFormatter(xmax=1.0))
 axis_accuracy.set(xlabel='Epoch', ylabel='Accuracy(%)')
