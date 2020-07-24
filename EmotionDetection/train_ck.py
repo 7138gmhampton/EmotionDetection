@@ -145,3 +145,8 @@ history = model.fit(numpy.array(data_train),
 
 # Save Model
 save_trained_model(model, history.history['acc'][-1], history.history['val_acc'][-1])
+
+# Plot Training History
+figure, axis_loss = pyplot.subplots()
+axis_loss.plot(history.history['acc'])
+pyplot.show()
