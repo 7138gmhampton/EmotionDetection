@@ -6,12 +6,12 @@ import numpy
 import cv2
 from PIL import Image
 import matplotlib.pyplot as pyplot
-from hyper import FACE_SIZE
 
 os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
 # pylint: disable=wrong-import-position
 from keras.preprocessing.image import load_img, img_to_array
 from face_extract import excise_face
+from hyper import FACE_SIZE
 
 TrainableImage = namedtuple('TrainableImage', ['image_array', 'emotion'])
 
