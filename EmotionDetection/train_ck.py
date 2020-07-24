@@ -34,58 +34,58 @@ batch_size = hyper.BATCH_SIZE
 no_of_epochs = args.epochs
 rows, cols = hyper.ROWS, hyper.COLS
 
-def build_model():
-    model = Sequential()
+# def build_model():
+#     model = Sequential()
 
-    features_from_filters = no_of_features
+#     features_from_filters = no_of_features
     
-    model.add(Conv2D(features_from_filters, kernel_size=(3, 3), activation='relu', 
-        input_shape=(FACE_BOUND_SCALED, FACE_BOUND_SCALED, 1), data_format='channels_last', kernel_regularizer=l2(0.01)))
-    model.add(Conv2D(features_from_filters, kernel_size=(3, 3), activation='relu', padding='same'))
-    model.add(BatchNormalization())
-    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-    model.add(Dropout(hyper.DROPOUT))
+#     model.add(Conv2D(features_from_filters, kernel_size=(3, 3), activation='relu', 
+#         input_shape=(FACE_BOUND_SCALED, FACE_BOUND_SCALED, 1), data_format='channels_last', kernel_regularizer=l2(0.01)))
+#     model.add(Conv2D(features_from_filters, kernel_size=(3, 3), activation='relu', padding='same'))
+#     model.add(BatchNormalization())
+#     model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
+#     model.add(Dropout(hyper.DROPOUT))
 
-    model.add(Conv2D(2*features_from_filters, kernel_size=(3, 3), activation='relu', padding='same'))
-    model.add(BatchNormalization())
-    model.add(Conv2D(2*features_from_filters, kernel_size=(3, 3), activation='relu', padding='same'))
-    model.add(BatchNormalization())
-    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-    model.add(Dropout(hyper.DROPOUT))
+#     model.add(Conv2D(2*features_from_filters, kernel_size=(3, 3), activation='relu', padding='same'))
+#     model.add(BatchNormalization())
+#     model.add(Conv2D(2*features_from_filters, kernel_size=(3, 3), activation='relu', padding='same'))
+#     model.add(BatchNormalization())
+#     model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
+#     model.add(Dropout(hyper.DROPOUT))
 
-    model.add(Conv2D(2*2*features_from_filters, kernel_size=(3, 3), activation='relu', padding='same'))
-    model.add(BatchNormalization())
-    model.add(Conv2D(2*2*features_from_filters, kernel_size=(3, 3), activation='relu', padding='same'))
-    model.add(BatchNormalization())
-    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-    model.add(Dropout(hyper.DROPOUT))
+#     model.add(Conv2D(2*2*features_from_filters, kernel_size=(3, 3), activation='relu', padding='same'))
+#     model.add(BatchNormalization())
+#     model.add(Conv2D(2*2*features_from_filters, kernel_size=(3, 3), activation='relu', padding='same'))
+#     model.add(BatchNormalization())
+#     model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
+#     model.add(Dropout(hyper.DROPOUT))
 
-    model.add(Conv2D(2*2*2*features_from_filters, kernel_size=(3, 3), activation='relu', padding='same'))
-    model.add(BatchNormalization())
-    model.add(Conv2D(2*2*2*features_from_filters, kernel_size=(3, 3), activation='relu', padding='same'))
-    model.add(BatchNormalization())
-    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-    model.add(Dropout(hyper.DROPOUT))
+#     model.add(Conv2D(2*2*2*features_from_filters, kernel_size=(3, 3), activation='relu', padding='same'))
+#     model.add(BatchNormalization())
+#     model.add(Conv2D(2*2*2*features_from_filters, kernel_size=(3, 3), activation='relu', padding='same'))
+#     model.add(BatchNormalization())
+#     model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
+#     model.add(Dropout(hyper.DROPOUT))
 
-    model.add(Flatten())
+#     model.add(Flatten())
 
-    model.add(Dense(2*2*2*features_from_filters, activation='relu'))
-    model.add(Dropout(hyper.DROPOUT))
-    model.add(Dense(2*2*features_from_filters, activation='relu'))
-    model.add(Dropout(hyper.DROPOUT))
-    model.add(Dense(2*features_from_filters, activation='relu'))
-    model.add(Dropout(hyper.DROPOUT))
+#     model.add(Dense(2*2*2*features_from_filters, activation='relu'))
+#     model.add(Dropout(hyper.DROPOUT))
+#     model.add(Dense(2*2*features_from_filters, activation='relu'))
+#     model.add(Dropout(hyper.DROPOUT))
+#     model.add(Dense(2*features_from_filters, activation='relu'))
+#     model.add(Dropout(hyper.DROPOUT))
 
-    model.add(Dense(no_of_labels, activation='softmax'))
+#     model.add(Dense(no_of_labels, activation='softmax'))
 
 
-    # Compile Model
+#     # Compile Model
     
-    model.compile(loss=categorical_crossentropy, 
-    optimizer=Adam(), 
-    metrics=['accuracy'])
+#     model.compile(loss=categorical_crossentropy, 
+#     optimizer=Adam(), 
+#     metrics=['accuracy'])
 
-    return model
+#     return model
 
 def save_trained_model(model, accuracy, validation_accuracy):
     directory = 'models'
