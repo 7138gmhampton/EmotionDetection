@@ -16,19 +16,19 @@ os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
 from keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from model_builders import build_shanks
 import hyper
-# from hyper import FACE_BOUND_SCALED
+from hyper import BATCH_SIZE, SCALE_DOWN_FACTOR
 
-# Command Line Parameter
+# Command Line Parameters
 parser = argparse.ArgumentParser(description='Train CNN model with Cohn-Kanade dataset.')
 parser.add_argument('-e', '--epochs', type=int , required=True)
 args = parser.parse_args()
 
 # Hyperparameters
-no_of_features = hyper.NO_OF_FEATURES
-no_of_labels = hyper.NO_OF_LABELS
-batch_size = hyper.BATCH_SIZE
-no_of_epochs = args.epochs
-rows, cols = hyper.ROWS, hyper.COLS
+# no_of_features = hyper.NO_OF_FEATURES
+# no_of_labels = hyper.NO_OF_LABELS
+# batch_size = hyper.BATCH_SIZE
+# no_of_epochs = args.epochs
+# rows, cols = hyper.ROWS, hyper.COLS
 
 def plot_training(plotting_history, plot_filename):
     figure, (axis_loss, axis_accuracy) = pyplot.subplots(2, 1, sharex=True)
@@ -60,9 +60,10 @@ def save_trained_model(model, training_history):
     with open(os.path.join(directory, details_name), 'w') as text_file:
         text_file.write('Training Accuracy: ' + '{:1.3f}'.format(training_history['acc'][-1]) + '\n')
         text_file.write('Validation Accuracy: ' + '{:1.3f}'.format(training_history['val_acc'][-1]) + '\n')
-        text_file.write('Scale Factor: ' + '{:2d}'.format(hyper.SCALE_FACTOR) + '\n')
-        text_file.write('Batch Size: ' + '{:3d}'.format(hyper.BATCH_SIZE) + '\n')
-        text_file.write('No. of Epochs: ' + '{:3d}'.format(no_of_epochs) + '\n')
+        # text_file.write('Scale Factor: ' + '{:2d}'.format(hyper.SCALE_FACTOR) + '\n')
+        text_file.write('Scale Down Factor: ' + '{:2d}'.format(SCALE_DOWN_FACTOR) + '\n')
+        text_file.write('Batch Size: ' + '{:3d}'.format(BATCH_SIZE) + '\n')
+        text_file.write('No. of Epochs: ' + '{:3d}'.format(args.epochs) + '\n')
         text_file.write('Dropout: ' + '{:1.3f}'.format(hyper.DROPOUT) + '\n')
     model.save_weights(os.path.join(directory, weights_name))
     plot_training(training_history, os.path.join(directory, graph_name))
@@ -97,8 +98,8 @@ early_stopper = EarlyStopping(monitor='val_loss', mode='max', verbose=1, patienc
 rate_reducer = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=5, verbose=1)
 training = model.fit(numpy.array(data_train), 
           numpy.array(labels_train), 
-          batch_size=batch_size, 
-          epochs=no_of_epochs,
+          batch_size=BATCH_SIZE, 
+          epochs=args.epochs,
           verbose=1,
           validation_data=(numpy.array(data_valid), numpy.array(labels_valid)),
           shuffle=True,
