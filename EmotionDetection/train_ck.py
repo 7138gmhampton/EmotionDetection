@@ -27,14 +27,12 @@ args = parser.parse_args()
 no_of_features = hyper.NO_OF_FEATURES
 no_of_labels = hyper.NO_OF_LABELS
 batch_size = hyper.BATCH_SIZE
-#no_of_epochs = hyper.NO_OF_EPOCHS
 no_of_epochs = args.epochs
 rows, cols = hyper.ROWS, hyper.COLS
 
 def build_model():
     model = Sequential()
 
-    #features_from_filters = hp.Int('filters', min_value=32, max_value=512, step=32)
     features_from_filters = no_of_features
     
     model.add(Conv2D(features_from_filters, kernel_size=(3, 3), activation='relu', 
@@ -76,10 +74,8 @@ def build_model():
 
     model.add(Dense(no_of_labels, activation='softmax'))
 
-    #model.summary()
 
     # Compile Model
-    # learning_schedule = tensorflow.keras.optimizers.schedules.ExponentialDecay(0.1,10000,0.96)
     
     model.compile(loss=categorical_crossentropy, 
     optimizer=Adam(), 
@@ -88,7 +84,6 @@ def build_model():
     return model
 
 def save_trained_model(model, accuracy, validation_accuracy):
-    #now = datetime.now()
     directory = 'models'
     timestamp = datetime.now().strftime('%Y%m%d-%H%M')
     model_name = timestamp + '_model.json'
@@ -113,21 +108,9 @@ def save_trained_model(model, accuracy, validation_accuracy):
 data = numpy.load('ck_data.npy')
 labels = numpy.load('ck_labels.npy')
 
-# Check Load from File
-#for iii in range(3):
-#    pyplot.figure(iii).suptitle(labels[iii])
-#    pyplot.imshow(data[iii].reshape((HEIGHT,WIDTH)), interpolation='none', cmap='gray')
-#pyplot.show()
-
 # Standardise
 data -= numpy.mean(data, 0)
 data /= numpy.std(data, 0)
-
-# Check Standardise
-#for iii in range(3):
-#    pyplot.figure(iii).suptitle(labels[iii])
-#    pyplot.imshow(data[iii].reshape((HEIGHT,WIDTH)), interpolation='none', cmap='gray')
-#pyplot.show()
 
 # Change Labels to Categorical
 from keras.utils import to_categorical
@@ -142,76 +125,7 @@ numpy.save('ck_test_data', data_test)
 numpy.save('ck_test_labels', labels_test)
 print(' -- Test Data Saved --')
 
-# CNN Pipeline
-
-#model = Sequential()
-
-#model.add(Conv2D(no_of_features, kernel_size=(3, 3), activation='relu', 
-#    input_shape=(rows, cols, 1), data_format='channels_last', kernel_regularizer=l2(0.01)))
-#model.add(Conv2D(no_of_features, kernel_size=(3, 3), activation='relu', padding='same'))
-#model.add(BatchNormalization())
-#model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-#model.add(Dropout(0.5))
-
-#model.add(Conv2D(2*no_of_features, kernel_size=(3, 3), activation='relu', padding='same'))
-#model.add(BatchNormalization())
-#model.add(Conv2D(2*no_of_features, kernel_size=(3, 3), activation='relu', padding='same'))
-#model.add(BatchNormalization())
-#model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-#model.add(Dropout(0.5))
-
-#model.add(Conv2D(2*2*no_of_features, kernel_size=(3, 3), activation='relu', padding='same'))
-#model.add(BatchNormalization())
-#model.add(Conv2D(2*2*no_of_features, kernel_size=(3, 3), activation='relu', padding='same'))
-#model.add(BatchNormalization())
-#model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-#model.add(Dropout(0.5))
-
-#model.add(Conv2D(2*2*2*no_of_features, kernel_size=(3, 3), activation='relu', padding='same'))
-#model.add(BatchNormalization())
-#model.add(Conv2D(2*2*2*no_of_features, kernel_size=(3, 3), activation='relu', padding='same'))
-#model.add(BatchNormalization())
-#model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-#model.add(Dropout(0.5))
-
-#model.add(Flatten())
-
-#model.add(Dense(2*2*2*no_of_features, activation='relu'))
-#model.add(Dropout(0.5))
-#model.add(Dense(2*2*no_of_features, activation='relu'))
-#model.add(Dropout(0.5))
-#model.add(Dense(2*no_of_features, activation='relu'))
-#model.add(Dropout(0.5))
-
-#model.add(Dense(no_of_labels, activation='softmax'))
-
-#model.summary()
-
-#model = build_model()
-
 # Train Model
-#model.fit(numpy.array(data_train), 
-#          numpy.array(labels_train), 
-#          batch_size=batch_size, 
-#          epochs=no_of_epochs,
-#          verbose=1,
-#          validation_data=(numpy.array(data_valid), numpy.array(labels_valid)),
-#          shuffle=True)
-
-#from kerastuner.tuners import RandomSearch
-
-#tuner = RandomSearch(build_model, objective='val_accuracy', max_trials=1, executions_per_trial=1,
-#                     directory='tuning_model')
-
-#tuner.search_space_summary()
-
-#tuner.search(numpy.array(data_train),
-#             numpy.array(labels_train),
-#             batch_size=batch_size,
-#             epochs=no_of_epochs,
-#             verbose=1,
-#             validation_data=(numpy.array(data_valid), numpy.array(labels_valid)))
-
 build = build_shanks
 model = build()
 early_stopper = EarlyStopping(monitor='val_loss', mode='max', verbose=1, patience=20, min_delta=0.001)
@@ -224,8 +138,6 @@ history = model.fit(numpy.array(data_train),
           validation_data=(numpy.array(data_valid), numpy.array(labels_valid)),
           shuffle=True,
           callbacks=[rate_reducer])
-        #   callbacks=[early_stopper])
 
 # Save Model
 save_trained_model(model, history.history['acc'][-1], history.history['val_acc'][-1])
-#print(history.history['val_accuracy'][-1])
