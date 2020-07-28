@@ -17,7 +17,8 @@ from hyper import BATCH_SIZE, SCALE_DOWN_FACTOR, DROPOUT
 # Command Line Parameters
 parser = argparse.ArgumentParser(description='Train CNN model with Cohn-Kanade dataset.')
 parser.add_argument('-e', '--epochs', type=int, required=True)
-parser.add_argument('--model', action='store_true')
+parser.add_argument('-m', '--model', default='shanks', required=False)
+parser.add_argument('--summary', action='store_true')
 args = parser.parse_args()
 
 # Hyperparameters
@@ -97,7 +98,7 @@ print(' -- Test Data Saved --')
 
 # Train Model
 # build = build_shanks
-model = prepare_model('shanks', args.model)
+model = prepare_model(args.model, args.summary)
 early_stopper = EarlyStopping(monitor='val_loss', mode='max', verbose=1,
                               patience=20, min_delta=0.001)
 rate_reducer = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=5, verbose=1)
