@@ -3,13 +3,14 @@ import os
 
 os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
 # pylint: disable=wrong-import-position
-from keras.models import Sequential, Model
+from keras.models import Sequential, Model, model_from_json
 from keras.layers import Conv2D, BatchNormalization, MaxPooling2D, Dropout,\
      Flatten, Dense, Input, concatenate
 from keras.regularizers import l2
 from keras.losses import categorical_crossentropy
 from keras.optimizers import Adam
-from hyper import NO_OF_FEATURES, FACE_BOUND_SCALED, DROPOUT, NO_OF_LABELS
+from hyper import NO_OF_FEATURES, FACE_BOUND_SCALED, DROPOUT, NO_OF_LABELS, \
+    MODEL_DIRECTORY
 
 def build_shanks(display_summary=False):
     """Builds model based on one from Nishank Sharma - \
@@ -120,4 +121,15 @@ def prepare_model(selected_model, show_summary):
     # Compile Model
     model.compile(loss=categorical_crossentropy, optimizer=Adam(),
                   metrics=['accuracy'])
+    return model
+
+def reload_model(timestamp):
+    """Load a previously trained model"""
+    model_name = timestamp + '_model.json'
+    weights_name = timestamp + '_weights.h5'
+    
+    with open(os.path.join(MODEL_DIRECTORY, model_name), 'r') as json_model:
+        model = model_from_json(json_model.read())
+    model.load_weights(os.path.join(MODEL_DIRECTORY, weights_name))
+    
     return model

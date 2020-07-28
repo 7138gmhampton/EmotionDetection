@@ -9,6 +9,7 @@ from keras.preprocessing.image import load_img, img_to_array
 from keras.models import model_from_json
 from face_extract import excise_face
 from matplotlib.ticker import MaxNLocator
+from model_builders import reload_model
 
 def acquire_model(timestamp):
     directory = hyper.MODEL_DIRECTORY
@@ -38,7 +39,8 @@ cropped_data = numpy.expand_dims(cropped_data, 0)
 checkable_data = cropped_data.copy()
 
 # Prepare Model
-model = acquire_model(args.timestamp)
+# model = acquire_model(args.timestamp)
+model = reload_model(args.timestamp)
 
 # Make Prediction
 prediction = model.predict(checkable_data).tolist()[0]
