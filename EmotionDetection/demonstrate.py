@@ -51,10 +51,18 @@ print('Predictions: ' + str(all_predictions))
 
 # Show Image and Confidence Plot
 figure, (axis_image, axis_confidence) = pyplot.subplots(1,2)
-axis_image.imshow(checkable_data[0].reshape(FACE_SIZE), interpolation='none', cmap='gray')
+axis_image.imshow(checkable_data[0].reshape(FACE_SIZE), interpolation='none', 
+                  cmap='gray')
 axis_confidence.barh(numpy.arange(len(prediction)), width=prediction)
 axis_confidence.yaxis.set_major_locator(MaxNLocator(integer=True))
-axis_confidence.set_yticklabels(['','neutral','surprise','sadness','fear','anger','disgust','joy'])
+axis_confidence.set_yticklabels(['',
+                                 'neutral',
+                                 'surprise',
+                                 'sadness',
+                                 'fear',
+                                 'anger',
+                                 'disgust',
+                                 'joy'])
 axis_confidence.set_xlim([0,1])
 axis_confidence.xaxis.set_major_locator(MaxNLocator(10))
 axis_confidence.grid(True, which='major', axis='x', linestyle='--')
