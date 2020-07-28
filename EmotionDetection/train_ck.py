@@ -11,7 +11,7 @@ os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
 # pylint: disable=wrong-import-position
 from keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from keras.utils import to_categorical
-from model_builders import build_shanks
+from model_builders import prepare_model
 from hyper import BATCH_SIZE, SCALE_DOWN_FACTOR, DROPOUT
 
 # Command Line Parameters
@@ -95,8 +95,8 @@ numpy.save('ck_test_labels', labels_test)
 print(' -- Test Data Saved --')
 
 # Train Model
-build = build_shanks
-model = build()
+# build = build_shanks
+model = prepare_model('shanks')
 early_stopper = EarlyStopping(monitor='val_loss', mode='max', verbose=1,
                               patience=20, min_delta=0.001)
 rate_reducer = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=5, verbose=1)
