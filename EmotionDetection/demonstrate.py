@@ -1,14 +1,15 @@
-import argparse, hyper, numpy, os
+"""Employ trained model on a single image to show prediction confidence"""
+import argparse
+import os
+import numpy
 import matplotlib.pyplot as pyplot
-from hyper import FACE_SIZE
+from matplotlib.ticker import MaxNLocator
 import cv2
-# from cv2 import CascadeClassifier, normalize
+from hyper import FACE_SIZE
 
 os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
-from keras.preprocessing.image import load_img, img_to_array
-from keras.models import model_from_json
+# pylint: disable=wrong-import-position
 from face_extract import excise_face
-from matplotlib.ticker import MaxNLocator
 from model_builders import reload_model
 
 # def acquire_model(timestamp):
