@@ -2,7 +2,7 @@ import argparse, hyper, numpy, os
 import matplotlib.pyplot as pyplot
 from hyper import FACE_SIZE
 import cv2
-from cv2 import CascadeClassifier, normalize
+# from cv2 import CascadeClassifier, normalize
 
 os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
 from keras.preprocessing.image import load_img, img_to_array
@@ -30,7 +30,7 @@ args = parser.parse_args()
 # Preprocess Image
 full_image = cv2.imread(args.image)
 gray_image = cv2.cvtColor(full_image, cv2.COLOR_BGR2GRAY)
-face_only = excise_face(gray_image, CascadeClassifier('haarcascade_frontalface_default.xml'))
+face_only = excise_face(gray_image, cv2.CascadeClassifier('haarcascade_frontalface_default.xml'))
 face_only -= face_only.mean()
 face_only /= face_only.std()
 cropped_data = numpy.expand_dims(face_only, -1)
