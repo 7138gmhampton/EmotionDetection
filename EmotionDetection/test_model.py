@@ -1,5 +1,6 @@
 import argparse, os, hyper, numpy
 
+os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
 from keras.models import model_from_json, Sequential
 #from keras.layers import
 
