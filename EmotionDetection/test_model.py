@@ -1,4 +1,5 @@
 import argparse, os, hyper, numpy
+from metrics import author_confusion_matrix
 
 os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
 from keras.models import model_from_json, Sequential
@@ -42,6 +43,7 @@ labels = numpy.load('ck_test_labels.npy')
 
 # Predict Based on Model and Test Data
 predicted_output = model.predict(data).tolist()
+print(predicted_output)
 true_output = labels.tolist()
 
 # Compare Prediction to Truth
@@ -66,3 +68,5 @@ log_accuracy(timestamp, accuracy)
 numpy.save('prediction_list', prediction_list)
 numpy.save('true_list', true_list)
 print(' -- Lists saved --')
+
+author_confusion_matrix(true_list, prediction_list, args.timestamp)
