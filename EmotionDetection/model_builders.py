@@ -74,6 +74,8 @@ def build_shanks(display_summary=False):
 
 def build_dexpression(display_summary=False):
     """Builds DeXpression model - Buckert et al, 2016"""
+    filter_scale_one_and_a_half = int(1.5*NO_OF_FEATURES)
+    filter_scale_three_and_a_quarter = int(3.25*NO_OF_FEATURES)
     image_input = Input(shape=(FACE_BOUND_SCALED, FACE_BOUND_SCALED, 1))
     
     # Model Start
@@ -83,16 +85,16 @@ def build_dexpression(display_summary=False):
     start = BatchNormalization()(pooling_1)
     
     # Feature Extraction 1
-    convolution_2a = Conv2D(1.5*NO_OF_FEATURES, (1, 1), strides=(1, 1), activation='relu', padding='valid', name='convolution-2a')(start)
-    convolution_2b = Conv2D(3.25*NO_OF_FEATURES, (3, 3),strides=(1, 1), activation='relu', padding='valid', name='convolution-2b')(convolution_2a)
+    convolution_2a = Conv2D(filter_scale_one_and_a_half, (1, 1), strides=(1, 1), activation='relu', padding='valid', name='convolution-2a')(start)
+    convolution_2b = Conv2D(filter_scale_three_and_a_quarter, (3, 3),strides=(1, 1), activation='relu', padding='valid', name='convolution-2b')(convolution_2a)
     pooling_2a = MaxPooling2D((3, 3), strides=(1, 1), padding='valid', name='pooling-2a')(start)
     convolution_2c = Conv2D(NO_OF_FEATURES, (1 ,1), strides=(1,1), name='convolution-2c')(pooling_2a)
     concatenate_2 = concatenate(inputs=[convolution_2b, convolution_2c], axis=3, name='concatenate-2')
     pooling_2b = MaxPooling2D((3, 3), strides=(2, 2), padding='valid', name='pooling-2b')(concatenate_2)
     
     # Feature Extraction 2
-    convolution_3a = Conv2D(1.5*NO_OF_FEATURES, (1, 1), strides=(1, 1), activation='relu', padding='valid', name='convolution-3a')(pooling_2b)
-    convolution_3b = Conv2D(3.25*NO_OF_FEATURES, (3, 3),strides=(1, 1), activation='relu', padding='valid', name='convolution-3b')(convolution_3a)
+    convolution_3a = Conv2D(filter_scale_one_and_a_half, (1, 1), strides=(1, 1), activation='relu', padding='valid', name='convolution-3a')(pooling_2b)
+    convolution_3b = Conv2D(filter_scale_three_and_a_quarter, (3, 3),strides=(1, 1), activation='relu', padding='valid', name='convolution-3b')(convolution_3a)
     pooling_3a = MaxPooling2D((3,3), strides=(1,1), padding='valid', name='pooling-3a')(pooling_2b)
     convolution_3c = Conv2D(NO_OF_FEATURES, (1, 1), strides=(1, 1), name='convolution-3c')(pooling_3a)
     concatenate_3 = concatenate(inputs=[convolution_3b, convolution_3c], axis=3, name='concatenate-3')
@@ -103,10 +105,10 @@ def build_dexpression(display_summary=False):
     classifier = Dense(NO_OF_LABELS, activation='softmax', name='predictions')(flatten)
     
     # Combine Model
-    dexpression_model = Model(image_input, classifier, name='deXpression')
+    model = Model(image_input, classifier, name='deXpression')
     
     if display_summary: model.summary()
-    return dexpression_model
+    return model
 
 def prepare_model(selected_model, show_summary):
     """Build and compile selected model"""
