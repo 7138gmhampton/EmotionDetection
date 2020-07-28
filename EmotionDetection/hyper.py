@@ -1,6 +1,7 @@
 """Contains constants and hyperparameters for the training of the Facial \
     Expression Recognition classifier"""
 MODEL_DIRECTORY = 'models'
+FACE_EXTRACTOR = 'haarcascade_frontalface_default.xml'
 
 IMAGE_HEIGHT = 490
 IMAGE_WIDTH = 640

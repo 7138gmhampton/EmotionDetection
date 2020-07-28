@@ -1,7 +1,7 @@
 """Employs OpenCV API to extract faces from given images"""
 import numpy
 import cv2
-from hyper import FACE_SIZE
+from hyper import FACE_SIZE, FACE_EXTRACTOR
 
 def display_face(source_image, face, index):
     """Display an excise \'face\'"""
@@ -12,8 +12,9 @@ def display_face(source_image, face, index):
 
     cv2.imshow('multiface'+ str(index), display)
 
-def excise_face(image_array, classifier):
+def excise_face(image_array):
     """Detect face and crop image to that alone"""
+    classifier = cv2.CascadeClassifier(FACE_EXTRACTOR)
     int_array = image_array.astype(numpy.uint8)
     faces = classifier.detectMultiScale(int_array, 1.1, 5, minSize=(200, 200),\
         maxSize=(350, 350))

@@ -34,7 +34,7 @@ args = parser.parse_args()
 # Preprocess Image
 full_image = cv2.imread(args.image)
 gray_image = cv2.cvtColor(full_image, cv2.COLOR_BGR2GRAY)
-face_only = excise_face(gray_image, cv2.CascadeClassifier('haarcascade_frontalface_default.xml'))
+face_only = excise_face(gray_image)
 face_only -= face_only.mean()
 face_only /= face_only.std()
 cropped_data = numpy.expand_dims(face_only, -1)
