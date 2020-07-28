@@ -11,16 +11,16 @@ from face_extract import excise_face
 from matplotlib.ticker import MaxNLocator
 from model_builders import reload_model
 
-def acquire_model(timestamp):
-    directory = hyper.MODEL_DIRECTORY
-    model_name = timestamp + '_model.json'
-    weights_name = timestamp + '_weights.h5'
+# def acquire_model(timestamp):
+#     directory = hyper.MODEL_DIRECTORY
+#     model_name = timestamp + '_model.json'
+#     weights_name = timestamp + '_weights.h5'
     
-    with open(os.path.join(directory, model_name), 'r') as json_model:
-        model = model_from_json(json_model.read())
-    model.load_weights(os.path.join(directory, weights_name))
+#     with open(os.path.join(directory, model_name), 'r') as json_model:
+#         model = model_from_json(json_model.read())
+#     model.load_weights(os.path.join(directory, weights_name))
 
-    return model
+#     return model
 
 # Command Line Arguments
 parser = argparse.ArgumentParser(description='Demonstrate a single prediction for the given model.')
