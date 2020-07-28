@@ -11,7 +11,7 @@ from keras.losses import categorical_crossentropy
 from keras.optimizers import Adam
 from hyper import NO_OF_FEATURES, FACE_BOUND_SCALED, DROPOUT, NO_OF_LABELS
 
-def build_shanks():
+def build_shanks(display_summary=False):
     """Builds model based on one from Nishank Sharma - \
         github.com/gitshanks/fer2013"""
     model = Sequential()
@@ -69,9 +69,10 @@ def build_shanks():
     # model.compile(loss=categorical_crossentropy, optimizer=Adam(),
     #               metrics=['accuracy'])
 
+    if display_summary: model.summary()
     return model
 
-def build_dexpression():
+def build_dexpression(display_summary=False):
     """Builds DeXpression model - Buckert et al, 2016"""
     image_input = Input(shape=(FACE_BOUND_SCALED, FACE_BOUND_SCALED, 1))
     
@@ -104,14 +105,15 @@ def build_dexpression():
     # Combine Model
     dexpression_model = Model(image_input, classifier, name='deXpression')
     
+    if display_summary: model.summary()
     return dexpression_model
 
-def prepare_model(selected_model):
+def prepare_model(selected_model, show_summary):
     """Build and compile selected model"""
     build_functions = {'shanks':build_shanks, 'dexpression':build_dexpression}
     function_to_use = build_functions.get(selected_model, build_shanks)
     
-    model = function_to_use()
+    model = function_to_use(show_summary)
     
     # Compile Model
     model.compile(loss=categorical_crossentropy, optimizer=Adam(),
