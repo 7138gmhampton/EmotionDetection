@@ -24,8 +24,10 @@ from model_builders import reload_model
 #     return model
 
 # Command Line Arguments
-parser = argparse.ArgumentParser(description='Demonstrate a single prediction for the given model.')
-parser.add_argument('-t', '--timestamp', help='The datetime for the model', required=True)
+parser = argparse.ArgumentParser(description='Demonstrate a single prediction \
+                                 for the given model.')
+parser.add_argument('-t', '--timestamp', help='The datetime for the model', 
+                    required=True)
 parser.add_argument('-i', '--image', help='Image to predict on', required=True)
 args = parser.parse_args()
 
@@ -40,7 +42,6 @@ cropped_data = numpy.expand_dims(cropped_data, 0)
 checkable_data = cropped_data.copy()
 
 # Prepare Model
-# model = acquire_model(args.timestamp)
 model = reload_model(args.timestamp)
 
 # Make Prediction
