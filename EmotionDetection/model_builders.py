@@ -78,36 +78,52 @@ def build_dexpression(display_summary=False):
     filter_scale_one_and_a_half = int(1.5*NO_OF_FEATURES)
     filter_scale_three_and_a_quarter = int(3.25*NO_OF_FEATURES)
     image_input = Input(shape=(FACE_BOUND_SCALED, FACE_BOUND_SCALED, 1))
-    
+
     # Model Start
-    convolution_1 = Conv2D(NO_OF_FEATURES, (5, 5), padding='valid', 
+    convolution_1 = Conv2D(NO_OF_FEATURES, (5, 5), padding='valid',
                            activation='relu', name='convolution-1')(image_input)
     pooling_1 = MaxPooling2D((2, 2), strides=(2, 2), name='pooling-1')(convolution_1)
     start = BatchNormalization()(pooling_1)
-    
+
     # Feature Extraction 1
-    convolution_2a = Conv2D(filter_scale_one_and_a_half, (1, 1), strides=(1, 1), activation='relu', padding='valid', name='convolution-2a')(start)
-    convolution_2b = Conv2D(filter_scale_three_and_a_quarter, (3, 3),strides=(1, 1), activation='relu', padding='valid', name='convolution-2b')(convolution_2a)
-    pooling_2a = MaxPooling2D((3, 3), strides=(1, 1), padding='valid', name='pooling-2a')(start)
-    convolution_2c = Conv2D(NO_OF_FEATURES, (1 ,1), strides=(1,1), name='convolution-2c')(pooling_2a)
-    concatenate_2 = concatenate(inputs=[convolution_2b, convolution_2c], axis=3, name='concatenate-2')
-    pooling_2b = MaxPooling2D((3, 3), strides=(2, 2), padding='valid', name='pooling-2b')(concatenate_2)
-    
+    convolution_2a = Conv2D(filter_scale_one_and_a_half, (1, 1), strides=(1, 1),
+                            activation='relu', padding='valid',
+                            name='convolution-2a')(start)
+    convolution_2b = Conv2D(filter_scale_three_and_a_quarter, (3, 3), strides=(1, 1),
+                            activation='relu', padding='valid',
+                            name='convolution-2b')(convolution_2a)
+    pooling_2a = MaxPooling2D((3, 3), strides=(1, 1), padding='valid',
+                              name='pooling-2a')(start)
+    convolution_2c = Conv2D(NO_OF_FEATURES, (1, 1), strides=(1, 1),
+                            name='convolution-2c')(pooling_2a)
+    concatenate_2 = concatenate(inputs=[convolution_2b, convolution_2c], axis=3,
+                                name='concatenate-2')
+    pooling_2b = MaxPooling2D((3, 3), strides=(2, 2), padding='valid',
+                              name='pooling-2b')(concatenate_2)
+
     # Feature Extraction 2
-    convolution_3a = Conv2D(filter_scale_one_and_a_half, (1, 1), strides=(1, 1), activation='relu', padding='valid', name='convolution-3a')(pooling_2b)
-    convolution_3b = Conv2D(filter_scale_three_and_a_quarter, (3, 3),strides=(1, 1), activation='relu', padding='valid', name='convolution-3b')(convolution_3a)
-    pooling_3a = MaxPooling2D((3,3), strides=(1,1), padding='valid', name='pooling-3a')(pooling_2b)
-    convolution_3c = Conv2D(NO_OF_FEATURES, (1, 1), strides=(1, 1), name='convolution-3c')(pooling_3a)
-    concatenate_3 = concatenate(inputs=[convolution_3b, convolution_3c], axis=3, name='concatenate-3')
-    pooling_3b = MaxPooling2D((3, 3), strides=(2, 2), padding='valid', name='pooling-3b')(concatenate_3)
-    
+    convolution_3a = Conv2D(filter_scale_one_and_a_half, (1, 1), strides=(1, 1),
+                            activation='relu', padding='valid',
+                            name='convolution-3a')(pooling_2b)
+    convolution_3b = Conv2D(filter_scale_three_and_a_quarter, (3, 3), strides=(1, 1),
+                            ctivation='relu', padding='valid',
+                            name='convolution-3b')(convolution_3a)
+    pooling_3a = MaxPooling2D((3, 3), strides=(1, 1), padding='valid',
+                              name='pooling-3a')(pooling_2b)
+    convolution_3c = Conv2D(NO_OF_FEATURES, (1, 1), strides=(1, 1),
+                            name='convolution-3c')(pooling_3a)
+    concatenate_3 = concatenate(inputs=[convolution_3b, convolution_3c], axis=3,
+                                name='concatenate-3')
+    pooling_3b = MaxPooling2D((3, 3), strides=(2, 2), padding='valid',
+                              name='pooling-3b')(concatenate_3)
+
     # Classification
     flatten = Flatten()(pooling_3b)
     classifier = Dense(NO_OF_LABELS, activation='softmax', name='predictions')(flatten)
-    
+
     # Combine Model
     model = Model(image_input, classifier, name='deXpression')
-    
+
     if display_summary: model.summary()
     return model
 
@@ -115,9 +131,9 @@ def prepare_model(selected_model, show_summary):
     """Build and compile selected model"""
     build_functions = {'shanks':build_shanks, 'dexpression':build_dexpression}
     function_to_use = build_functions.get(selected_model, build_shanks)
-    
+
     model = function_to_use(show_summary)
-    
+
     # Compile Model
     model.compile(loss=categorical_crossentropy, optimizer=Adam(),
                   metrics=['accuracy'])
@@ -127,9 +143,9 @@ def reload_model(timestamp):
     """Load a previously trained model"""
     model_name = timestamp + '_model.json'
     weights_name = timestamp + '_weights.h5'
-    
+
     with open(os.path.join(MODEL_DIRECTORY, model_name), 'r') as json_model:
         model = model_from_json(json_model.read())
     model.load_weights(os.path.join(MODEL_DIRECTORY, weights_name))
-    
+
     return model
