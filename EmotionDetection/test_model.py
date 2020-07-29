@@ -1,12 +1,19 @@
-import argparse, os, hyper, numpy
-from metrics import author_confusion_matrix
+"""
+Do a prediction across the test dataset and compare to assigned emotions by 
+determining accuracy and producing confusion matrix
+"""
+import argparse
+import os
+import numpy
 
 os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
-from keras.models import model_from_json, Sequential
-#from keras.layers import
+# pylint: disable=wrong-import-position
+from keras.models import model_from_json
+from metrics import author_confusion_matrix
+from hyper import MODEL_DIRECTORY
 
 def acquire_model(timestamp):
-    directory = hyper.MODEL_DIRECTORY
+    directory = MODEL_DIRECTORY
     model_name = timestamp + '_model.json'
     weights_name = timestamp + '_weights.h5'
     
@@ -20,7 +27,7 @@ def acquire_model(timestamp):
 def log_accuracy(timestamp, accuracy):
     details_name = timestamp + '_details.txt'
 
-    with open(os.path.join(hyper.MODEL_DIRECTORY, details_name), 'r+') as details:
+    with open(os.path.join(MODEL_DIRECTORY, details_name), 'r+') as details:
         if 'Test Accuracy: ' not in details.read():
             details.write('Test Accuracy: ' + '{:1.3f}'.format(accuracy) + '\n')
 
