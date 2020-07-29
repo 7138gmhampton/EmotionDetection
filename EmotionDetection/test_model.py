@@ -1,5 +1,5 @@
 """
-Do a prediction across the test dataset and compare to assigned emotions by 
+Do a prediction across the test dataset and compare to assigned emotions by
 determining accuracy and producing confusion matrix
 """
 import argparse
@@ -8,24 +8,12 @@ import numpy
 
 os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
 # pylint: disable=wrong-import-position
-from keras.models import model_from_json
 from metrics import author_confusion_matrix
 from hyper import MODEL_DIRECTORY
 from model_builders import reload_model
 
-# def acquire_model(timestamp):
-#     directory = MODEL_DIRECTORY
-#     model_name = timestamp + '_model.json'
-#     weights_name = timestamp + '_weights.h5'
-    
-#     with open(os.path.join(directory, model_name), 'r') as json_model:
-#         #return model_from_json(json_model.read())
-#         model = model_from_json(json_model.read())
-#     model.load_weights(os.path.join(directory, weights_name))
-
-#     return model
-
 def log_accuracy(timestamp, calculated_accuracy):
+    """Append the accuracy calculated from the test dataset to the model details text file"""
     details_name = timestamp + '_details.txt'
 
     with open(os.path.join(MODEL_DIRECTORY, details_name), 'r+') as details:
@@ -34,15 +22,12 @@ def log_accuracy(timestamp, calculated_accuracy):
 
 # Set up Command Line Arguments
 parser = argparse.ArgumentParser(description='Apply test examples to trained model.')
-parser.add_argument('-t', '--timestamp', help='The datetime for the model', required=True)
+parser.add_argument('-t', '--timestamp', help='The datetime for the model',
+                    required=True)
 args = parser.parse_args()
 
-#print(args.model)
 
 # Prepare Model
-# timestamp = args.timestamp
-
-# model = acquire_model(args.timestamp)
 model = reload_model(args.timestamp)
 print(' -- Model loaded from file --')
 
@@ -52,7 +37,6 @@ labels = numpy.load('ck_test_labels.npy')
 
 # Predict Based on Model and Test Data
 predicted_output = model.predict(data).tolist()
-# print(predicted_output)
 true_output = labels.tolist()
 
 # Compare Prediction to Truth
