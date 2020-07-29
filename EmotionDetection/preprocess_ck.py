@@ -23,9 +23,9 @@ def rotate_image(array_image, rotation):
     """This function rotates the image clockwise or anticlockwise for data \
         augmentation"""
     rows, cols, channels = array_image.shape # pylint: disable=unused-variable
-    
+
     rotation_matrix = cv2.getRotationMatrix2D((cols/2, rows/2), rotation, 1)
-    
+
     return cv2.warpAffine(array_image, rotation_matrix, (cols, rows))
 
 def prepare_image_for_cnn(file, emotion_code, reverse=False, rotate=0):
@@ -44,7 +44,8 @@ def load_entire_emotion(directory_of_images, emotion_code):
     images_of_emotion = []
 
     # for file in os.listdir(os.fsencode(directory_of_images)):
-    for file in progress_bar(os.listdir(os.fsencode(directory_of_images)), suffix=directory_of_images):
+    for file in progress_bar(os.listdir(os.fsencode(directory_of_images)),
+                             suffix=directory_of_images):
         filename = directory_of_images + '\\' + os.fsdecode(file)
         images_of_emotion.append(prepare_image_for_cnn(filename, emotion_code))
         images_of_emotion.append(prepare_image_for_cnn(filename, emotion_code, rotate=CLOCKWISE))
