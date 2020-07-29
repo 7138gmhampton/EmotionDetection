@@ -3,7 +3,7 @@ import argparse
 import os
 import numpy
 import matplotlib.pyplot as pyplot
-from matplotlib.ticker import MaxNLocator
+from matplotlib.ticker import MaxNLocator, PercentFormatter
 import cv2
 from hyper import FACE_SIZE
 
@@ -35,8 +35,8 @@ model = reload_model(args.timestamp)
 
 # Make Prediction
 prediction = model.predict(checkable_data).tolist()[0]
-all_predictions = model.predict(checkable_data)
-print('Predictions: ' + str(all_predictions))
+# all_predictions = model.predict(checkable_data)
+# print('Predictions: ' + str(all_predictions))
 
 # Show Image and Confidence Plot
 figure, (axis_image, axis_confidence) = pyplot.subplots(1, 2)
@@ -53,7 +53,8 @@ axis_confidence.set_yticklabels(['',
                                  'disgust',
                                  'joy'])
 axis_confidence.set_xlim([0, 1])
-axis_confidence.xaxis.set_major_locator(MaxNLocator(10))
+axis_confidence.xaxis.set_major_locator(MaxNLocator(4))
+axis_confidence.xaxis.set_major_formatter(PercentFormatter(xmax=1.0))
 axis_confidence.grid(True, which='major', axis='x', linestyle='--')
 pyplot.subplots_adjust(wspace=0.5)
 pyplot.show()
