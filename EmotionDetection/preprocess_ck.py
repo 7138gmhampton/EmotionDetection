@@ -6,6 +6,7 @@ import numpy
 import cv2
 from PIL import Image
 import matplotlib.pyplot as pyplot
+from progress_bar import progress_bar
 
 os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
 # pylint: disable=wrong-import-position
@@ -42,7 +43,8 @@ def load_entire_emotion(directory_of_images, emotion_code):
     """Prepare an entire emotion's worth of images for training"""
     images_of_emotion = []
 
-    for file in os.listdir(os.fsencode(directory_of_images)):
+    # for file in os.listdir(os.fsencode(directory_of_images)):
+    for file in progress_bar(os.listdir(os.fsencode(directory_of_images)), suffix==directory_of_images):
         filename = directory_of_images + '\\' + os.fsdecode(file)
         images_of_emotion.append(prepare_image_for_cnn(filename, emotion_code))
         images_of_emotion.append(prepare_image_for_cnn(filename, emotion_code, rotate=CLOCKWISE))
@@ -60,14 +62,15 @@ directories = [('000 neutral', 0),
 
 prepared_images = []
 
+print(' -- Prepare and Augment --')
 for directory in directories:
     prepared_images.extend(load_entire_emotion(directory[0], directory[1]))
 
 # random.shuffle(prepared_images)
 
 # Extract Trainable Data and Labels
-dataset = [] # pylint: disable=invalid-name
-indexed_labels = [] # pylint: disable=invalid-name
+dataset = []
+indexed_labels = []
 for prepared_image in prepared_images:
     image_array = numpy.asarray(prepared_image.image_array)
     dataset.append(image_array.astype('float32'))
