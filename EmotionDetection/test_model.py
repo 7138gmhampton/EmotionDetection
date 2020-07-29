@@ -11,18 +11,19 @@ os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
 from keras.models import model_from_json
 from metrics import author_confusion_matrix
 from hyper import MODEL_DIRECTORY
+from model_builders import reload_model
 
-def acquire_model(timestamp):
-    directory = MODEL_DIRECTORY
-    model_name = timestamp + '_model.json'
-    weights_name = timestamp + '_weights.h5'
+# def acquire_model(timestamp):
+#     directory = MODEL_DIRECTORY
+#     model_name = timestamp + '_model.json'
+#     weights_name = timestamp + '_weights.h5'
     
-    with open(os.path.join(directory, model_name), 'r') as json_model:
-        #return model_from_json(json_model.read())
-        model = model_from_json(json_model.read())
-    model.load_weights(os.path.join(directory, weights_name))
+#     with open(os.path.join(directory, model_name), 'r') as json_model:
+#         #return model_from_json(json_model.read())
+#         model = model_from_json(json_model.read())
+#     model.load_weights(os.path.join(directory, weights_name))
 
-    return model
+#     return model
 
 def log_accuracy(timestamp, accuracy):
     details_name = timestamp + '_details.txt'
@@ -39,9 +40,10 @@ args = parser.parse_args()
 #print(args.model)
 
 # Prepare Model
-timestamp = args.timestamp
+# timestamp = args.timestamp
 
-model = acquire_model(timestamp)
+# model = acquire_model(args.timestamp)
+model = reload_model(args.timestamp)
 print(' -- Model loaded from file --')
 
 # Load Testing Data
@@ -50,7 +52,7 @@ labels = numpy.load('ck_test_labels.npy')
 
 # Predict Based on Model and Test Data
 predicted_output = model.predict(data).tolist()
-print(predicted_output)
+# print(predicted_output)
 true_output = labels.tolist()
 
 # Compare Prediction to Truth
@@ -68,8 +70,8 @@ for iii in range(len(labels)):
 
 #print((count_of_matches/len(labels))*100)
 accuracy = (count_of_matches/len(labels))
-print('Accuracy of ' + timestamp +' model: ' + '{:2.2f}'.format(accuracy*100) + '%')
-log_accuracy(timestamp, accuracy)
+print('Accuracy of ' + args.timestamp +' model: ' + '{:2.2f}'.format(accuracy*100) + '%')
+log_accuracy(args.timestamp, accuracy)
 
 # Save Prediction and True Labels Lists for Confusion Matrix
 numpy.save('prediction_list', prediction_list)
