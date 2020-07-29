@@ -6,8 +6,9 @@ def progress_bar(iterable, decimals=1, length=100, fill='█', print_end='\r', *
     :param suffix: Text to appear after bar
     """
     total = len(iterable)
-    if 'suffix' in kwargs: suffix = kwargs['suffix']
-    else: suffix = ''
+    # if 'suffix' in kwargs: suffix = kwargs['suffix']
+    # else: suffix = ''
+    suffix = kwargs['suffix'] if 'suffix' in kwargs else ''
     prefix = kwargs['prefix'] if 'prefix' in kwargs else ''
     
     def print_progress_bar(iteration):
