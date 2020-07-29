@@ -25,12 +25,12 @@ from model_builders import reload_model
 
 #     return model
 
-def log_accuracy(timestamp, accuracy):
+def log_accuracy(timestamp, calculated_accuracy):
     details_name = timestamp + '_details.txt'
 
     with open(os.path.join(MODEL_DIRECTORY, details_name), 'r+') as details:
         if 'Test Accuracy: ' not in details.read():
-            details.write('Test Accuracy: ' + '{:1.3f}'.format(accuracy) + '\n')
+            details.write('Test Accuracy: ' + '{:1.3f}'.format(calculated_accuracy) + '\n')
 
 # Set up Command Line Arguments
 parser = argparse.ArgumentParser(description='Apply test examples to trained model.')
