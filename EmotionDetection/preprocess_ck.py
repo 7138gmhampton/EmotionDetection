@@ -15,12 +15,25 @@ from hyper import FACE_SIZE
 
 TrainableImage = namedtuple('TrainableImage', ['image_array', 'emotion'])
 
-def prepare_image_for_cnn(file, emotion_code, reverse=False):
+CLOCKWISE = 5
+ANTICLOCKWISE = -CLOCKWISE
+
+def rotate_image(array_image, rotation):
+    """This function rotates the image clockwise or anticlockwise for data \
+        augmentation"""
+    rows, cols, channels = array_image.shape
+    
+    rotation_matrix = cv2.getRotationMatrix2D((cols/2, rows/2), rotation, 1)
+    
+    return cv2.warpAffine(array_image, rotation_matrix, (cols, rows))
+
+def prepare_image_for_cnn(file, emotion_code, reverse=False, rotate=0):
     """Load in single image, extract the face and denote the assigned emotion"""
     image = load_img(file, color_mode='grayscale', target_size=None)
     if reverse: image.transpose(Image.FLIP_LEFT_RIGHT)
 
     image_as_array = img_to_array(image)
+    if rotate != 0: image_as_array = rotate_image(image_as_array, rotate)
     face_only = excise_face(image_as_array)
 
     return TrainableImage(face_only, emotion_code)
@@ -32,6 +45,7 @@ def load_entire_emotion(directory_of_images, emotion_code):
     for file in os.listdir(os.fsencode(directory_of_images)):
         filename = directory_of_images + '\\' + os.fsdecode(file)
         images_of_emotion.append(prepare_image_for_cnn(filename, emotion_code))
+        images_of_emotion.append(prepare_image_for_cnn(filename, emotion_code, rotate=CLOCKWISE))
         images_of_emotion.append(prepare_image_for_cnn(filename, emotion_code, True))
 
     return images_of_emotion
@@ -49,7 +63,7 @@ prepared_images = []
 for directory in directories:
     prepared_images.extend(load_entire_emotion(directory[0], directory[1]))
 
-random.shuffle(prepared_images)
+# random.shuffle(prepared_images)
 
 # Extract Trainable Data and Labels
 dataset = [] # pylint: disable=invalid-name
@@ -77,7 +91,7 @@ numpy.save('ck_labels', indexed_labels)
 print(' -- Labels saved -- ')
 
 # Check Output
-for iii in range(1):
+for iii in range(3):
     pyplot.figure(iii).suptitle(indexed_labels[iii])
     pyplot.imshow(trainable_data[iii].reshape(FACE_SIZE), interpolation='none',\
         cmap='gray')
