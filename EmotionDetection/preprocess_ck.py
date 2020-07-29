@@ -22,7 +22,7 @@ ANTICLOCKWISE = -CLOCKWISE
 def rotate_image(array_image, rotation):
     """This function rotates the image clockwise or anticlockwise for data \
         augmentation"""
-    rows, cols, channels = array_image.shape
+    rows, cols, channels = array_image.shape # pylint: disable=unused-variable
     
     rotation_matrix = cv2.getRotationMatrix2D((cols/2, rows/2), rotation, 1)
     
@@ -66,7 +66,7 @@ print(' -- Prepare and Augment --')
 for directory in directories:
     prepared_images.extend(load_entire_emotion(directory[0], directory[1]))
 
-# random.shuffle(prepared_images)
+random.shuffle(prepared_images)
 
 # Extract Trainable Data and Labels
 dataset = []
