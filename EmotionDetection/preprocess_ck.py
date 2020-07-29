@@ -21,8 +21,7 @@ def prepare_image_for_cnn(file, emotion_code, reverse=False):
     if reverse: image.transpose(Image.FLIP_LEFT_RIGHT)
 
     image_as_array = img_to_array(image)
-    face_only = excise_face(image_as_array, \
-        cv2.CascadeClassifier('haarcascade_frontalface_default.xml'))
+    face_only = excise_face(image_as_array)
 
     return TrainableImage(face_only, emotion_code)
 
