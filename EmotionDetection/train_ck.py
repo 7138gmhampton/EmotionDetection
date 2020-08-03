@@ -22,13 +22,6 @@ parser.add_argument('-m', '--model', default='dexpression', required=False)
 parser.add_argument('--summary', action='store_true')
 args = parser.parse_args()
 
-# Hyperparameters
-# no_of_features = hyper.NO_OF_FEATURES
-# no_of_labels = hyper.NO_OF_LABELS
-# batch_size = hyper.BATCH_SIZE
-# no_of_epochs = args.epochs
-# rows, cols = hyper.ROWS, hyper.COLS
-
 def plot_training(plotting_history, plot_filename):
     """Plot and export the history of the changes in the loss and the accuracy \
         for both the training and validation datasets"""
@@ -60,16 +53,6 @@ def save_trained_model(trained_model, training_history):
     model_json = trained_model.to_json()
     with open(os.path.join(directory, model_name), 'w') as json_file:
         json_file.write(model_json)
-    # with open(os.path.join(directory, details_name), 'w') as text_file:
-    #     text_file.write('Training Accuracy: ' +
-    #                     '{:1.3f}'.format(training_history['acc'][-1]) + '\n')
-    #     text_file.write('Validation Accuracy: ' +
-    #                     '{:1.3f}'.format(training_history['val_acc'][-1]) + '\n')
-    #     text_file.write('Scale Down Factor: ' +
-    #                     '{:2d}'.format(SCALE_DOWN_FACTOR) + '\n')
-    #     text_file.write('Batch Size: ' + '{:3d}'.format(BATCH_SIZE) + '\n')
-    #     text_file.write('No. of Epochs: ' + '{:3d}'.format(args.epochs) + '\n')
-    #     text_file.write('Dropout: ' + '{:1.3f}'.format(DROPOUT) + '\n')
     log_details(timestamp, training_history, args.epochs, args.model)
     trained_model.save_weights(os.path.join(directory, weights_name))
     plot_training(training_history, os.path.join(directory, graph_name))
@@ -99,7 +82,6 @@ numpy.save('ck_test_labels', labels_test)
 print(' -- Test Data Saved --')
 
 # Train Model
-# build = build_shanks
 model = prepare_model(args.model, args.summary)
 early_stopper = EarlyStopping(monitor='val_loss', mode='max', verbose=1,
                               patience=20, min_delta=0.001)
