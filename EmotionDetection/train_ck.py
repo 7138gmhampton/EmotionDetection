@@ -3,8 +3,6 @@ import os
 import argparse
 from datetime import datetime
 from sklearn.model_selection import train_test_split
-import matplotlib.pyplot as pyplot
-from matplotlib.ticker import MaxNLocator, PercentFormatter
 import numpy
 
 os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
@@ -21,24 +19,6 @@ parser.add_argument('-e', '--epochs', type=int, required=True)
 parser.add_argument('-m', '--model', default='dexpression', required=False)
 parser.add_argument('--summary', action='store_true')
 args = parser.parse_args()
-
-# def plot_training(plotting_history, plot_filename):
-#     """Plot and export the history of the changes in the loss and the accuracy \
-#         for both the training and validation datasets"""
-#     figure, (axis_loss, axis_accuracy) = pyplot.subplots(2, 1, sharex=True)
-#     pyplot.subplots_adjust(hspace=0.01)
-
-#     axis_loss.plot(plotting_history['loss'], label='training')
-#     axis_loss.plot(plotting_history['val_loss'], label='validation')
-#     axis_loss.set(ylabel='Loss')
-
-#     axis_accuracy.plot(plotting_history['acc'], label='training')
-#     axis_accuracy.plot(plotting_history['val_acc'], label='validation')
-#     axis_accuracy.xaxis.set_major_locator(MaxNLocator(integer=True))
-#     axis_accuracy.yaxis.set_major_formatter(PercentFormatter(xmax=1.0))
-#     axis_accuracy.set(xlabel='Epoch', ylabel='Accuracy(%)')
-
-#     figure.savefig(plot_filename)
 
 def save_trained_model(trained_model, training_history):
     """Save the model and it weights. Also output a text file detailing the \
