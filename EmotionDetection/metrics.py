@@ -14,7 +14,7 @@ def author_confusion_matrix(true, predicted, timestamp):
     
     # figure = pyplot.figure()
     figure, axis = pyplot.subplots()
-    matrix_image = axis.imshow(matrix, interpolation='nearest', cmap=pyplot.cm.Blues)
+    matrix_image = axis.imshow(matrix, interpolation='nearest', cmap=pyplot.cm.get_cmap(name='Blues'))
     # axis.title('Confusion Matrix')
     axis.set(title='Confusion Matrix')
     figure.colorbar(matrix_image)
