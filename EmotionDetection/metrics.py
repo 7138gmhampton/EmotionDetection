@@ -1,3 +1,4 @@
+"""Contains functions for recording various metrics of trained models"""
 import os
 import numpy
 import itertools
