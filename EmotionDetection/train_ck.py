@@ -84,7 +84,8 @@ model = prepare_model(args.model, args.summary)
 early_stopper = EarlyStopping(monitor='val_loss', mode='max', verbose=1,
                               patience=20, min_delta=0.001)
 rate_reducer = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=5, verbose=1)
-checkpointer = ModelCheckpoint('checkpoint.h5', monitor='val_acc', verbose=1, save_best_only=True, save_weights_only=True)
+checkpointer = ModelCheckpoint('checkpoint.h5', monitor='val_acc', verbose=1,
+                               save_best_only=True, save_weights_only=True)
 training = model.fit(numpy.array(data_train),
                      numpy.array(labels_train),
                      batch_size=BATCH_SIZE,
