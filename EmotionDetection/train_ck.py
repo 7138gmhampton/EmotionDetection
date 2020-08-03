@@ -6,14 +6,14 @@ from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as pyplot
 from matplotlib.ticker import MaxNLocator, PercentFormatter
 import numpy
-from metrics import log_details
 
 os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
 # pylint: disable=wrong-import-position
 from keras.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint
 from keras.utils import to_categorical
+from metrics import log_details
 from model_builders import prepare_model
-from hyper import BATCH_SIZE, SCALE_DOWN_FACTOR, DROPOUT
+from hyper import BATCH_SIZE
 
 # Command Line Parameters
 parser = argparse.ArgumentParser(description='Train CNN model with Cohn-Kanade dataset.')
