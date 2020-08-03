@@ -9,7 +9,7 @@ import numpy
 
 os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
 # pylint: disable=wrong-import-position
-from keras.callbacks import EarlyStopping, ReduceLROnPlateau
+from keras.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint
 from keras.utils import to_categorical
 from model_builders import prepare_model
 from hyper import BATCH_SIZE, SCALE_DOWN_FACTOR, DROPOUT
@@ -102,6 +102,7 @@ model = prepare_model(args.model, args.summary)
 early_stopper = EarlyStopping(monitor='val_loss', mode='max', verbose=1,
                               patience=20, min_delta=0.001)
 rate_reducer = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=5, verbose=1)
+checkpointer = ModelCheckpoint('checkpoint.h5', monitor='val_acc', verbose=1, save_best_only=True, save_weights_only=True)
 training = model.fit(numpy.array(data_train),
                      numpy.array(labels_train),
                      batch_size=BATCH_SIZE,
@@ -110,7 +111,8 @@ training = model.fit(numpy.array(data_train),
                      validation_data=(numpy.array(data_valid),
                                       numpy.array(labels_valid)),
                      shuffle=True,
-                     callbacks=[rate_reducer, early_stopper])
+                     callbacks=[rate_reducer, early_stopper, checkpointer])
 
 # Save Model
+model.load_weights('checkpoint.h5')
 save_trained_model(model, training.history)
