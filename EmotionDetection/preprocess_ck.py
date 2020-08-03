@@ -18,7 +18,7 @@ from hyper import FACE_SIZE
 # Command Line Parameters
 parser = argparse.ArgumentParser(description='Prepare and augment the Cohn-Kanade\
                                   for training, validation and testing')
-parser.add_argument('-r', '--restrict', action='store_true', 
+parser.add_argument('-r', '--restrict', action='store_true',
                     help='Preprocess without augmenting')
 args = parser.parse_args()
 
@@ -65,7 +65,7 @@ def load_entire_emotion(directory_of_images, emotion_code):
 
     return images
 
-if args.restrict: directories = [('000 neutral',0)]
+if args.restrict: directories = [('000 neutral', 0)]
 else:
     directories = [('000 neutral', 0),
                    ('001 surprise', 1),
