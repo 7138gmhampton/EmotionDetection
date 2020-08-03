@@ -1,8 +1,7 @@
 """Contains functions for recording various metrics of trained models"""
 import os
-import numpy
-import itertools
 from itertools import product
+import numpy
 import matplotlib.pyplot as pyplot
 from sklearn.metrics import confusion_matrix
 from hyper import MODEL_DIRECTORY, SCALE_DOWN_FACTOR, BATCH_SIZE
