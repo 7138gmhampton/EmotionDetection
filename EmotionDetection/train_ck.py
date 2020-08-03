@@ -47,7 +47,6 @@ def save_trained_model(trained_model, training_history):
     timestamp = datetime.now().strftime('%Y%m%d-%H%M')
     model_name = timestamp + '_model.json'
     weights_name = timestamp + '_weights.h5'
-    details_name = timestamp + '_details.txt'
     graph_name = timestamp + '_training.png'
 
     model_json = trained_model.to_json()
