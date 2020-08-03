@@ -28,7 +28,7 @@ def rotate_image(array_image, rotation):
 
     return cv2.warpAffine(array_image, rotation_matrix, (cols, rows))
 
-def prepare_image_for_cnn(file, emotion_code, reverse=False, rotate=0):
+def prepare_image(file, emotion_code, reverse=False, rotate=0):
     """Load in single image, extract the face and denote the assigned emotion"""
     image = load_img(file, color_mode='grayscale', target_size=None)
     if reverse: image.transpose(Image.FLIP_LEFT_RIGHT)
@@ -47,12 +47,12 @@ def load_entire_emotion(directory_of_images, emotion_code):
     for file in progress_bar(os.listdir(os.fsencode(directory_of_images)),
                              suffix=directory_of_images):
         filename = directory_of_images + '\\' + os.fsdecode(file)
-        images_of_emotion.append(prepare_image_for_cnn(filename, emotion_code))
-        images_of_emotion.append(prepare_image_for_cnn(filename, emotion_code, rotate=CLOCKWISE))
-        images_of_emotion.append(prepare_image_for_cnn(filename, emotion_code, rotate=ANTICLOCKWISE))
-        images_of_emotion.append(prepare_image_for_cnn(filename, emotion_code, True))
-        images_of_emotion.append(prepare_image_for_cnn(filename, emotion_code, True, rotate=CLOCKWISE))
-        images_of_emotion.append(prepare_image_for_cnn(filename, emotion_code, True, rotate=ANTICLOCKWISE))
+        images_of_emotion.append(prepare_image(filename, emotion_code))
+        images_of_emotion.append(prepare_image(filename, emotion_code, rotate=CLOCKWISE))
+        images_of_emotion.append(prepare_image(filename, emotion_code, rotate=ANTICLOCKWISE))
+        images_of_emotion.append(prepare_image(filename, emotion_code, True))
+        images_of_emotion.append(prepare_image(filename, emotion_code, True, rotate=CLOCKWISE))
+        images_of_emotion.append(prepare_image(filename, emotion_code, True, rotate=ANTICLOCKWISE))
 
     return images_of_emotion
 
