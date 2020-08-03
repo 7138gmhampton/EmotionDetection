@@ -57,26 +57,6 @@ def save_trained_model(trained_model, training_history):
     print(' -- Model Saved --')
 
 # Load Training Data
-# data = numpy.load('ck_data.npy')
-# labels = numpy.load('ck_labels.npy')
-
-# # Standardise
-# data -= numpy.mean(data, 0)
-# data /= numpy.std(data, 0)
-
-# # Change Labels to Categorical
-# labels = to_categorical(labels)
-
-# # Section Data
-# data_train, data_test, labels_train, labels_test = \
-#     train_test_split(data, labels, test_size=0.1, random_state=42)
-# data_train, data_valid, labels_train, labels_valid = \
-#     train_test_split(data_train, labels_train, test_size=0.1, random_state=42)
-
-# # Save Test Data
-# numpy.save('ck_test_data', data_test)
-# numpy.save('ck_test_labels', labels_test)
-# print(' -- Test Data Saved --')
 data_train, labels_train, data_valid, labels_valid = provide_data()
 
 # Train Model
