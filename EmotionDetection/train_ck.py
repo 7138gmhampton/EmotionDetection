@@ -36,7 +36,7 @@ def provide_data():
     numpy.save('ck_test_data', x_test)
     numpy.save('ck_test_labels', y_test)
     print(' -- Test Data Saved --')
-    
+
     return (x_train, y_train, x_valid, y_valid)
 
 def save_trained_model(trained_model, training_history):
