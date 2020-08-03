@@ -106,7 +106,7 @@ def build_dexpression(display_summary=False):
                             activation='relu', padding='valid',
                             name='convolution-3a')(pooling_2b)
     convolution_3b = Conv2D(filter_scale_three_and_a_quarter, (3, 3), strides=(1, 1),
-                            ctivation='relu', padding='valid',
+                            activation='relu', padding='valid',
                             name='convolution-3b')(convolution_3a)
     pooling_3a = MaxPooling2D((3, 3), strides=(1, 1), padding='valid',
                               name='pooling-3a')(pooling_2b)
