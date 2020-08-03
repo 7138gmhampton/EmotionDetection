@@ -20,6 +20,25 @@ parser.add_argument('-m', '--model', default='dexpression', required=False)
 parser.add_argument('--summary', action='store_true')
 args = parser.parse_args()
 
+def provide_data():
+    """Load preprocessed data and labels and standardise them for training"""
+    data = numpy.load('ck_data.npy')
+    labels = numpy.load('ck_labels.npy')
+
+    data -= numpy.mean(data, 0)
+    data /= numpy.std(data, 0)
+
+    labels = to_categorical(labels)
+
+    x_train, x_test, y_train, y_test = train_test_split(data, labels, test_size=0.1)
+    x_train, x_valid, y_train, y_valid = train_test_split(x_train, y_train, test_size=0.1)
+
+    numpy.save('ck_test_data', x_test)
+    numpy.save('ck_test_labels', y_test)
+    print(' -- Test Data Saved --')
+    
+    return (x_train, y_train, x_valid, y_valid)
+
 def save_trained_model(trained_model, training_history):
     """Save the model and it weights. Also output a text file detailing the \
         hyperparameters and a graphic of the training history"""
@@ -38,26 +57,27 @@ def save_trained_model(trained_model, training_history):
     print(' -- Model Saved --')
 
 # Load Training Data
-data = numpy.load('ck_data.npy')
-labels = numpy.load('ck_labels.npy')
+# data = numpy.load('ck_data.npy')
+# labels = numpy.load('ck_labels.npy')
 
-# Standardise
-data -= numpy.mean(data, 0)
-data /= numpy.std(data, 0)
+# # Standardise
+# data -= numpy.mean(data, 0)
+# data /= numpy.std(data, 0)
 
-# Change Labels to Categorical
-labels = to_categorical(labels)
+# # Change Labels to Categorical
+# labels = to_categorical(labels)
 
-# Section Data
-data_train, data_test, labels_train, labels_test = \
-    train_test_split(data, labels, test_size=0.1, random_state=42)
-data_train, data_valid, labels_train, labels_valid = \
-    train_test_split(data_train, labels_train, test_size=0.1, random_state=42)
+# # Section Data
+# data_train, data_test, labels_train, labels_test = \
+#     train_test_split(data, labels, test_size=0.1, random_state=42)
+# data_train, data_valid, labels_train, labels_valid = \
+#     train_test_split(data_train, labels_train, test_size=0.1, random_state=42)
 
-# Save Test Data
-numpy.save('ck_test_data', data_test)
-numpy.save('ck_test_labels', labels_test)
-print(' -- Test Data Saved --')
+# # Save Test Data
+# numpy.save('ck_test_data', data_test)
+# numpy.save('ck_test_labels', labels_test)
+# print(' -- Test Data Saved --')
+data_train, labels_train, data_valid, labels_valid = provide_data()
 
 # Train Model
 model = prepare_model(args.model, args.summary)
