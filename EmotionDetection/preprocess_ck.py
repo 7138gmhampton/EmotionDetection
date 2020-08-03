@@ -49,26 +49,21 @@ def prepare_image(file, emotion_code, reverse=False, rotate=0):
 
 def load_entire_emotion(directory_of_images, emotion_code):
     """Prepare an entire emotion's worth of images for training"""
-    images_of_emotion = []
+    images = []
 
     # for file in os.listdir(os.fsencode(directory_of_images)):
     for file in progress_bar(os.listdir(os.fsencode(directory_of_images)),
                              suffix=directory_of_images):
         filename = directory_of_images + '\\' + os.fsdecode(file)
-        images_of_emotion.append(prepare_image(filename, emotion_code))
+        images.append(prepare_image(filename, emotion_code))
         if not args.restrict:
-            images_of_emotion.append(prepare_image(filename, emotion_code, 
-                                                rotate=CLOCKWISE))
-            images_of_emotion.append(prepare_image(filename, emotion_code, 
-                                                rotate=ANTICLOCKWISE))
-            images_of_emotion.append(prepare_image(filename, emotion_code, 
-                                                True))
-            images_of_emotion.append(prepare_image(filename, emotion_code, 
-                                                True, rotate=CLOCKWISE))
-            images_of_emotion.append(prepare_image(filename, emotion_code, 
-                                                True, rotate=ANTICLOCKWISE))
+            images.append(prepare_image(filename, emotion_code, rotate=CLOCKWISE))
+            images.append(prepare_image(filename, emotion_code, rotate=ANTICLOCKWISE))
+            images.append(prepare_image(filename, emotion_code, True))
+            images.append(prepare_image(filename, emotion_code, True, rotate=CLOCKWISE))
+            images.append(prepare_image(filename, emotion_code, True, rotate=ANTICLOCKWISE))
 
-    return images_of_emotion
+    return images
 
 if args.restrict: directories = [('000 neutral',0)]
 else:
