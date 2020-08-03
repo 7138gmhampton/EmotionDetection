@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as pyplot
 from matplotlib.ticker import MaxNLocator, PercentFormatter
 import numpy
+from metrics import log_details
 
 os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
 # pylint: disable=wrong-import-position
@@ -17,7 +18,7 @@ from hyper import BATCH_SIZE, SCALE_DOWN_FACTOR, DROPOUT
 # Command Line Parameters
 parser = argparse.ArgumentParser(description='Train CNN model with Cohn-Kanade dataset.')
 parser.add_argument('-e', '--epochs', type=int, required=True)
-parser.add_argument('-m', '--model', default='shanks', required=False)
+parser.add_argument('-m', '--model', default='dexpression', required=False)
 parser.add_argument('--summary', action='store_true')
 args = parser.parse_args()
 
@@ -59,16 +60,17 @@ def save_trained_model(trained_model, training_history):
     model_json = trained_model.to_json()
     with open(os.path.join(directory, model_name), 'w') as json_file:
         json_file.write(model_json)
-    with open(os.path.join(directory, details_name), 'w') as text_file:
-        text_file.write('Training Accuracy: ' +
-                        '{:1.3f}'.format(training_history['acc'][-1]) + '\n')
-        text_file.write('Validation Accuracy: ' +
-                        '{:1.3f}'.format(training_history['val_acc'][-1]) + '\n')
-        text_file.write('Scale Down Factor: ' +
-                        '{:2d}'.format(SCALE_DOWN_FACTOR) + '\n')
-        text_file.write('Batch Size: ' + '{:3d}'.format(BATCH_SIZE) + '\n')
-        text_file.write('No. of Epochs: ' + '{:3d}'.format(args.epochs) + '\n')
-        text_file.write('Dropout: ' + '{:1.3f}'.format(DROPOUT) + '\n')
+    # with open(os.path.join(directory, details_name), 'w') as text_file:
+    #     text_file.write('Training Accuracy: ' +
+    #                     '{:1.3f}'.format(training_history['acc'][-1]) + '\n')
+    #     text_file.write('Validation Accuracy: ' +
+    #                     '{:1.3f}'.format(training_history['val_acc'][-1]) + '\n')
+    #     text_file.write('Scale Down Factor: ' +
+    #                     '{:2d}'.format(SCALE_DOWN_FACTOR) + '\n')
+    #     text_file.write('Batch Size: ' + '{:3d}'.format(BATCH_SIZE) + '\n')
+    #     text_file.write('No. of Epochs: ' + '{:3d}'.format(args.epochs) + '\n')
+    #     text_file.write('Dropout: ' + '{:1.3f}'.format(DROPOUT) + '\n')
+    log_details(timestamp, training_history, args.epochs, args.model)
     trained_model.save_weights(os.path.join(directory, weights_name))
     plot_training(training_history, os.path.join(directory, graph_name))
 
