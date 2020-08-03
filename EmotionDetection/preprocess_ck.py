@@ -1,5 +1,6 @@
 """Prepare the Cohn-Kanade Dataset for Training"""
 import os
+import argparse
 import random
 from collections import namedtuple
 import numpy
@@ -13,6 +14,13 @@ from keras.preprocessing.image import load_img, img_to_array
 from progress_bar import progress_bar
 from face_extract import excise_face
 from hyper import FACE_SIZE
+
+# Command Line Parameters
+parser = argparse.ArgumentParser(description='Prepare and augment the Cohn-Kanade\
+                                  for training, validation and testing')
+parser.add_argument('-r', '--restrict', action='store_true', 
+                    help='Preprocess without augmenting')
+args = parser.parse_args()
 
 TrainableImage = namedtuple('TrainableImage', ['image_array', 'emotion'])
 
@@ -48,26 +56,29 @@ def load_entire_emotion(directory_of_images, emotion_code):
                              suffix=directory_of_images):
         filename = directory_of_images + '\\' + os.fsdecode(file)
         images_of_emotion.append(prepare_image(filename, emotion_code))
-        images_of_emotion.append(prepare_image(filename, emotion_code, 
-                                               rotate=CLOCKWISE))
-        images_of_emotion.append(prepare_image(filename, emotion_code, 
-                                               rotate=ANTICLOCKWISE))
-        images_of_emotion.append(prepare_image(filename, emotion_code, 
-                                               True))
-        images_of_emotion.append(prepare_image(filename, emotion_code, 
-                                               True, rotate=CLOCKWISE))
-        images_of_emotion.append(prepare_image(filename, emotion_code, 
-                                               True, rotate=ANTICLOCKWISE))
+        if not args.restrict:
+            images_of_emotion.append(prepare_image(filename, emotion_code, 
+                                                rotate=CLOCKWISE))
+            images_of_emotion.append(prepare_image(filename, emotion_code, 
+                                                rotate=ANTICLOCKWISE))
+            images_of_emotion.append(prepare_image(filename, emotion_code, 
+                                                True))
+            images_of_emotion.append(prepare_image(filename, emotion_code, 
+                                                True, rotate=CLOCKWISE))
+            images_of_emotion.append(prepare_image(filename, emotion_code, 
+                                                True, rotate=ANTICLOCKWISE))
 
     return images_of_emotion
 
-directories = [('000 neutral', 0),
-               ('001 surprise', 1),
-               ('002 sadness', 2),
-               ('003 fear', 3),
-               ('004 anger', 4),
-               ('005 disgust', 5),
-               ('006 joy', 6)]
+if args.restrict: directories = [('000 neutral',0)]
+else:
+    directories = [('000 neutral', 0),
+                   ('001 surprise', 1),
+                   ('002 sadness', 2),
+                   ('003 fear', 3),
+                   ('004 anger', 4),
+                   ('005 disgust', 5),
+                   ('006 joy', 6)]
 
 prepared_images = []
 
