@@ -13,7 +13,7 @@ from keras.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint
 from keras.utils import to_categorical
 from metrics import log_details
 from model_builders import prepare_model
-from hyper import BATCH_SIZE
+from hyper import BATCH_SIZE, MODEL_DIRECTORY
 
 # Command Line Parameters
 parser = argparse.ArgumentParser(description='Train CNN model with Cohn-Kanade dataset.')
@@ -43,18 +43,17 @@ def plot_training(plotting_history, plot_filename):
 def save_trained_model(trained_model, training_history):
     """Save the model and it weights. Also output a text file detailing the \
         hyperparameters and a graphic of the training history"""
-    directory = 'models'
     timestamp = datetime.now().strftime('%Y%m%d-%H%M')
     model_name = timestamp + '_model.json'
     weights_name = timestamp + '_weights.h5'
     graph_name = timestamp + '_training.png'
 
     model_json = trained_model.to_json()
-    with open(os.path.join(directory, model_name), 'w') as json_file:
+    with open(os.path.join(MODEL_DIRECTORY, model_name), 'w') as json_file:
         json_file.write(model_json)
     log_details(timestamp, training_history, args.epochs, args.model)
-    trained_model.save_weights(os.path.join(directory, weights_name))
-    plot_training(training_history, os.path.join(directory, graph_name))
+    trained_model.save_weights(os.path.join(MODEL_DIRECTORY, weights_name))
+    plot_training(training_history, os.path.join(MODEL_DIRECTORY, graph_name))
 
     print(' -- Model Saved --')
 
