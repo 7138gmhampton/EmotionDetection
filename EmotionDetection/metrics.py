@@ -48,5 +48,5 @@ def log_details(timestamp, history, epochs, model):
         text_file.write('Note the above metrics may not represent the checkpointed model\n')
         text_file.write('Scale Down Factor: ' + str(SCALE_DOWN_FACTOR) + '\n')
         text_file.write('Batch Size: ' + str(BATCH_SIZE) + '\n')
-        text_file.write('No. of Epochs: ' + str(len(history['acc'])) + '/' + str(epochs) + '\n')
+        text_file.write('No. of Epochs (Completed/Requested): ' + str(len(history['acc'])) + '/' + str(epochs) + '\n')
         
