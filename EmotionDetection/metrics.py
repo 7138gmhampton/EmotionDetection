@@ -9,6 +9,7 @@ from hyper import MODEL_DIRECTORY, SCALE_DOWN_FACTOR, BATCH_SIZE
 labels = ['joy', 'disgust', 'anger', 'fear', 'sadness', 'surprise', 'neutral']
 
 def author_confusion_matrix(true, predicted, timestamp):
+    """Prepare and save confusion matrix for tested model"""
     matrix_filename = timestamp + '_confusion.png'
     matrix = confusion_matrix(true, predicted, normalize='true')
     
@@ -33,6 +34,7 @@ def author_confusion_matrix(true, predicted, timestamp):
     figure.savefig(os.path.join(MODEL_DIRECTORY, matrix_filename))
     
 def log_details(timestamp, history, epochs, model):
+    """Save the pertinent details of a trained model in a .txt file"""
     filename = timestamp + '_details.txt'
     
     with open(os.path.join(MODEL_DIRECTORY, filename), 'w') as text_file:
