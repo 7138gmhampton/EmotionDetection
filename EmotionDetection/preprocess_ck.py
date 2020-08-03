@@ -48,11 +48,16 @@ def load_entire_emotion(directory_of_images, emotion_code):
                              suffix=directory_of_images):
         filename = directory_of_images + '\\' + os.fsdecode(file)
         images_of_emotion.append(prepare_image(filename, emotion_code))
-        images_of_emotion.append(prepare_image(filename, emotion_code, rotate=CLOCKWISE))
-        images_of_emotion.append(prepare_image(filename, emotion_code, rotate=ANTICLOCKWISE))
-        images_of_emotion.append(prepare_image(filename, emotion_code, True))
-        images_of_emotion.append(prepare_image(filename, emotion_code, True, rotate=CLOCKWISE))
-        images_of_emotion.append(prepare_image(filename, emotion_code, True, rotate=ANTICLOCKWISE))
+        images_of_emotion.append(prepare_image(filename, emotion_code, 
+                                               rotate=CLOCKWISE))
+        images_of_emotion.append(prepare_image(filename, emotion_code, 
+                                               rotate=ANTICLOCKWISE))
+        images_of_emotion.append(prepare_image(filename, emotion_code, 
+                                               True))
+        images_of_emotion.append(prepare_image(filename, emotion_code, 
+                                               True, rotate=CLOCKWISE))
+        images_of_emotion.append(prepare_image(filename, emotion_code, 
+                                               True, rotate=ANTICLOCKWISE))
 
     return images_of_emotion
 
