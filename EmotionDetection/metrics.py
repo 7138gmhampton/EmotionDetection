@@ -92,7 +92,7 @@ def plot_training(plotting_history, plot_filename):
     _prepare_graph(axis_accuracy, plotting_history, False)
 
     figure.savefig(plot_filename)
-    
+
 def log_accuracy(timestamp, calculated_accuracy):
     """Append the accuracy calculated from the test dataset to the model details text file"""
     details_name = timestamp + '_details.txt'
