@@ -20,6 +20,26 @@ def _get_loss_limits(history):
     
     return [0-padding, highest+padding]
 
+def _prepare_graph(graph, history, loss):
+    metric = ('loss', 'val_loss', 'Loss') if loss else ('acc', 'val_acc', 'Accuracy (%)')
+    
+    graph.plot(history[metric[0]], label='training', color='b')
+    graph.plot(history[metric[1]], label='validation', color='r')
+    graph.set_ylabel(ylabel=metric[2])
+    graph.xaxis.grid(True, which='major', linewidth='0.5')
+    graph.yaxis.grid(True, which='major', linestyle=':', linewidth='0.5')
+    
+    if loss:
+        graph.yaxis.set_major_locator(MaxNLocator(nbins=5))
+        graph.set_ylim(_get_loss_limits(history))
+        graph.legend()
+    else:
+        graph.xaxis.set_major_locator(MaxNLocator(integer=True))
+        graph.yaxis.set_major_locator(MultipleLocator(base=0.20))
+        graph.yaxis.set_major_formatter(PercentFormatter(xmax=1.0))
+        graph.set_ylim([0, 1.05])
+        graph.set_xlabel('Epoch')
+
 def author_confusion_matrix(true, predicted, timestamp):
     """Prepare and save confusion matrix for tested model"""
     matrix_filename = timestamp + '_confusion.png'
@@ -65,25 +85,28 @@ def log_details(timestamp, history, epochs, model):
 def plot_training(plotting_history, plot_filename):
     """Plot and export the history of the changes in the loss and the accuracy \
         for both the training and validation datasets"""
-    figure, (axis_loss, axis_accuracy) = pyplot.subplots(2, 1, sharex=True)
+    figure, (axis_loss, axis_accuracy) = pyplot.subplots(2, 1, sharex=True, figsize=(8,8))
     pyplot.subplots_adjust(hspace=0.01)
 
-    axis_loss.plot(plotting_history['loss'], label='training', color='b')
-    axis_loss.plot(plotting_history['val_loss'], label='validation', color='r')
-    axis_loss.set(ylabel='Loss')
+    # axis_loss.plot(plotting_history['loss'], label='training', color='b')
+    # axis_loss.plot(plotting_history['val_loss'], label='validation', color='r')
+    # axis_loss.set(ylabel='Loss')
     # axis_loss.grid(True, which='major', axis='x', linewidth='0.5')
     # axis_loss.set_ylim([0-(0.05*max(plotting_history['loss'])), max(plotting_history['loss'])])
-    axis_loss.set_ylim(_get_loss_limits(plotting_history))
-    axis_loss.xaxis.grid(True, which='major', linewidth='0.5')
-    axis_loss.legend()
+    # axis_loss.yaxis.set_major_locator(MaxNLocator())
+    # axis_loss.set_ylim(_get_loss_limits(plotting_history))
+    # axis_loss.xaxis.grid(True, which='major', linewidth='0.5')
+    # axis_loss.legend()
+    _prepare_graph(axis_loss, plotting_history, True)
 
-    axis_accuracy.plot(plotting_history['acc'], label='training', color='b')
-    axis_accuracy.plot(plotting_history['val_acc'], label='validation', color='r')
-    axis_accuracy.xaxis.set_major_locator(MaxNLocator(integer=True))
-    axis_accuracy.yaxis.set_major_locator(MultipleLocator(base=0.25))
-    axis_accuracy.yaxis.set_major_formatter(PercentFormatter(xmax=1.0))
-    axis_accuracy.set_ylim([0, 1.05])
-    axis_accuracy.set(xlabel='Epoch', ylabel='Accuracy(%)')
+    # axis_accuracy.plot(plotting_history['acc'], label='training', color='b')
+    # axis_accuracy.plot(plotting_history['val_acc'], label='validation', color='r')
+    # axis_accuracy.xaxis.set_major_locator(MaxNLocator(integer=True))
+    # axis_accuracy.yaxis.set_major_locator(MultipleLocator(base=0.20))
+    # axis_accuracy.yaxis.set_major_formatter(PercentFormatter(xmax=1.0))
+    # axis_accuracy.set_ylim([0, 1.05])
+    # axis_accuracy.set(xlabel='Epoch', ylabel='Accuracy(%)')
+    _prepare_graph(axis_accuracy, plotting_history, False)
 
     figure.savefig(plot_filename)
     
