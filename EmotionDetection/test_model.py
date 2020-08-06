@@ -26,7 +26,6 @@ parser.add_argument('-t', '--timestamp', help='The datetime for the model',
                     required=True)
 args = parser.parse_args()
 
-
 # Prepare Model
 model = reload_model(args.timestamp)
 print(' -- Model loaded from file --')
@@ -36,7 +35,7 @@ data = numpy.load('ck_test_data.npy')
 labels = numpy.load('ck_test_labels.npy')
 
 # Predict Based on Model and Test Data
-predicted_output = model.predict(data).tolist()
+predicted_output = model.predict(data, verbose=1).tolist()
 true_output = labels.tolist()
 
 # Compare Prediction to Truth
