@@ -6,7 +6,7 @@ import random
 import matplotlib.pyplot as pyplot
 import numpy
 
-from hyper import FACE_SIZE
+from hyper import FACE_SIZE, CLOCKWISE, ANTICLOCKWISE
 os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
 os.environ['PLAIDML_VERBOSE'] = '4'
 # pylint: disable=wrong-import-position
@@ -20,8 +20,8 @@ parser.add_argument('-r', '--restrict', action='store_true',
                     help='Preprocess without augmenting')
 args = parser.parse_args()
 
-CLOCKWISE = 5
-ANTICLOCKWISE = -CLOCKWISE
+# CLOCKWISE = 5
+# ANTICLOCKWISE = -CLOCKWISE
 
 def load_entire_emotion(directory_of_images, emotion_code):
     """Prepare an entire emotion's worth of images for training"""
