@@ -74,8 +74,8 @@ def log_details(timestamp, history, epochs, model):
 
     with open(os.path.join(MODEL_DIRECTORY, filename), 'w') as file:
         file.write('Model Used: ' + model + '\n')
-        file.write('Training Accuracy: ' + '{:.3f}'.format(history['acc'][-1]) + '\n')
-        file.write('Validation Accuracy: ' + '{:.3f}'.format(history['val_acc'][-1]) + '\n')
+        file.write('Training Accuracy: ' + '{:.5f}'.format(history['acc'][-1]) + '\n')
+        file.write('Validation Accuracy: ' + '{:.5f}'.format(history['val_acc'][-1]) + '\n')
         file.write('Note the above metrics may not represent the checkpointed model\n')
         file.write('Scale Down Factor: ' + str(SCALE_DOWN_FACTOR) + '\n')
         file.write('Batch Size: ' + str(BATCH_SIZE) + '\n')
@@ -92,3 +92,11 @@ def plot_training(plotting_history, plot_filename):
     _prepare_graph(axis_accuracy, plotting_history, False)
 
     figure.savefig(plot_filename)
+    
+def log_accuracy(timestamp, calculated_accuracy):
+    """Append the accuracy calculated from the test dataset to the model details text file"""
+    details_name = timestamp + '_details.txt'
+
+    with open(os.path.join(MODEL_DIRECTORY, details_name), 'r+') as details:
+        if 'Test Accuracy: ' not in details.read():
+            details.write('Test Accuracy: ' + '{:.5f}'.format(calculated_accuracy) + '\n')
