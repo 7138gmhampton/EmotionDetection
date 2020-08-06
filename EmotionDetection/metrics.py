@@ -23,7 +23,7 @@ def author_confusion_matrix(true, predicted, timestamp):
     figure.colorbar(matrix_image)
     tick_marks = numpy.arange(len(labels))
     axis.set_xticks(tick_marks)
-    axis.set_xticklabels(labels)
+    axis.set_xticklabels(labels, rotation=45, ha='right')
     axis.set_yticks(tick_marks)
     axis.set_yticklabels(labels)
     threshold = matrix.max()/2
