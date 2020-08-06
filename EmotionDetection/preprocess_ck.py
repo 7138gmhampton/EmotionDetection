@@ -2,19 +2,18 @@
 import os
 import argparse
 import random
-from collections import namedtuple
 import numpy
-import cv2
-from PIL import Image
+# import cv2
+# from PIL import Image
 import matplotlib.pyplot as pyplot
 
 os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
 # pylint: disable=wrong-import-position
-from keras.preprocessing.image import load_img, img_to_array
+# from keras.preprocessing.image import load_img, img_to_array
 from progress_bar import progress_bar
-from face_extract import excise_face
+# from face_extract import excise_face
 from hyper import FACE_SIZE
-from image_preparation import rotate_image, prepare_image
+from image_preparation import prepare_image
 
 # Command Line Parameters
 parser = argparse.ArgumentParser(description='Prepare and augment the Cohn-Kanade\
