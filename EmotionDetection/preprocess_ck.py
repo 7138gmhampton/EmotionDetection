@@ -20,9 +20,6 @@ parser.add_argument('-r', '--restrict', action='store_true',
                     help='Preprocess without augmenting')
 args = parser.parse_args()
 
-# CLOCKWISE = 5
-# ANTICLOCKWISE = -CLOCKWISE
-
 def load_entire_emotion(directory_of_images, emotion_code):
     """Prepare an entire emotion's worth of images for training"""
     images = []
@@ -40,14 +37,6 @@ def load_entire_emotion(directory_of_images, emotion_code):
             images.append(prepare_image(filename, emotion_code, True, rotate=ANTICLOCKWISE))
 
     return images
-
-# IMAGE_DIRECTORIES = [('000 neutral', 0),
-#                ('001 surprise', 1),
-#                ('002 sadness', 2),
-#                ('003 fear', 3),
-#                ('004 anger', 4),
-#                ('005 disgust', 5),
-#                ('006 joy', 6)]
 
 prepared_images = []
 
