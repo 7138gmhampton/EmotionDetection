@@ -50,17 +50,18 @@ def author_confusion_matrix(true, predicted, timestamp):
     """Prepare and save confusion matrix for tested model"""
     matrix_filename = timestamp + '_confusion.png'
     matrix = confusion_matrix(true, predicted, normalize='true')
-
     figure, axis = pyplot.subplots()
+    
     matrix_image = axis.imshow(matrix, interpolation='nearest',
                                cmap=pyplot.cm.get_cmap(name='Blues'))
     axis.set(title='Confusion Matrix')
-    figure.colorbar(matrix_image)
     tick_marks = numpy.arange(len(labels))
     axis.set_xticks(tick_marks)
     axis.set_xticklabels(labels, rotation=45, ha='right')
     axis.set_yticks(tick_marks)
     axis.set_yticklabels(labels)
+    axis.set_ylabel('True Label')
+    axis.set_xlabel('Predicted Label')
     # threshold = matrix.max()/2
 
     # for iii, jjj in product(range(matrix.shape[0]), range(matrix.shape[1])):
@@ -68,11 +69,9 @@ def author_confusion_matrix(true, predicted, timestamp):
     #               horizontalalignment='center',
     #               color='white' if matrix[iii, jjj] > threshold else 'black')
     _colourise_text(axis, matrix, matrix.max()/2)
-
-    axis.set_ylabel('True Label')
-    axis.set_xlabel('Predicted Label')
+    
+    figure.colorbar(matrix_image)
     figure.tight_layout()
-
     figure.savefig(os.path.join(MODEL_DIRECTORY, matrix_filename))
 
 def log_details(timestamp, history, epochs, model):
