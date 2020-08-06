@@ -3,7 +3,7 @@ import os
 from itertools import product
 
 import matplotlib.pyplot as pyplot
-from matplotlib.ticker import MaxNLocator, PercentFormatter
+from matplotlib.ticker import MaxNLocator, PercentFormatter, MultipleLocator
 import numpy
 from sklearn.metrics import confusion_matrix
 
@@ -62,12 +62,15 @@ def plot_training(plotting_history, plot_filename):
     axis_loss.plot(plotting_history['loss'], label='training', color='b')
     axis_loss.plot(plotting_history['val_loss'], label='validation', color='r')
     axis_loss.set(ylabel='Loss')
+    axis_loss.grid(True, which='major', axis='x', linewidth='0.5')
     axis_loss.legend()
 
     axis_accuracy.plot(plotting_history['acc'], label='training', color='b')
     axis_accuracy.plot(plotting_history['val_acc'], label='validation', color='r')
     axis_accuracy.xaxis.set_major_locator(MaxNLocator(integer=True))
+    axis_accuracy.yaxis.set_major_locator(MultipleLocator(base=0.25))
     axis_accuracy.yaxis.set_major_formatter(PercentFormatter(xmax=1.0))
+    axis_accuracy.set_ylim([0, 1.05])
     axis_accuracy.set(xlabel='Epoch', ylabel='Accuracy(%)')
 
     figure.savefig(plot_filename)
