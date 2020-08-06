@@ -27,7 +27,7 @@ def _prepare_graph(graph, history, loss):
     graph.plot(history[metric[1]], label='validation', color='r')
     graph.set_ylabel(ylabel=metric[2])
     graph.xaxis.grid(True, which='major', linewidth='0.5')
-    graph.yaxis.grid(True, which='major', linestyle=':', linewidth='0.5')
+    graph.yaxis.grid(True, which='major', linestyle=':', linewidth='0.75')
     
     if loss:
         graph.yaxis.set_major_locator(MaxNLocator(nbins=5))
@@ -86,7 +86,7 @@ def plot_training(plotting_history, plot_filename):
     """Plot and export the history of the changes in the loss and the accuracy \
         for both the training and validation datasets"""
     figure, (axis_loss, axis_accuracy) = pyplot.subplots(2, 1, sharex=True, figsize=(8,8))
-    pyplot.subplots_adjust(hspace=0.01)
+    pyplot.subplots_adjust(hspace=0.00)
 
     # axis_loss.plot(plotting_history['loss'], label='training', color='b')
     # axis_loss.plot(plotting_history['val_loss'], label='validation', color='r')
