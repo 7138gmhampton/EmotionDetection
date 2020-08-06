@@ -59,12 +59,13 @@ def plot_training(plotting_history, plot_filename):
     figure, (axis_loss, axis_accuracy) = pyplot.subplots(2, 1, sharex=True)
     pyplot.subplots_adjust(hspace=0.01)
 
-    axis_loss.plot(plotting_history['loss'], label='training')
-    axis_loss.plot(plotting_history['val_loss'], label='validation')
+    axis_loss.plot(plotting_history['loss'], label='training', color='b')
+    axis_loss.plot(plotting_history['val_loss'], label='validation', color='r')
     axis_loss.set(ylabel='Loss')
+    axis_loss.legend()
 
-    axis_accuracy.plot(plotting_history['acc'], label='training')
-    axis_accuracy.plot(plotting_history['val_acc'], label='validation')
+    axis_accuracy.plot(plotting_history['acc'], label='training', color='b')
+    axis_accuracy.plot(plotting_history['val_acc'], label='validation', color='r')
     axis_accuracy.xaxis.set_major_locator(MaxNLocator(integer=True))
     axis_accuracy.yaxis.set_major_formatter(PercentFormatter(xmax=1.0))
     axis_accuracy.set(xlabel='Epoch', ylabel='Accuracy(%)')
