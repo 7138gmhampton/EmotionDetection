@@ -43,8 +43,8 @@ def _prepare_graph(graph, history, loss):
 def _colourise_text(graph, matrix, threshold):
     for iii, jjj in product(range(matrix.shape[0]), range(matrix.shape[1])):
         graph.text(jjj, iii, format(matrix[iii, jjj], '0.2f'),
-                  horizontalalignment='center',
-                  color='white' if matrix[iii, jjj] > threshold else 'black')
+                   horizontalalignment='center',
+                   color='white' if matrix[iii, jjj] > threshold else 'black')
 
 def author_confusion_matrix(true, predicted, timestamp):
     """Prepare and save confusion matrix for tested model"""
@@ -91,7 +91,7 @@ def log_details(timestamp, history, epochs, model):
 def plot_training(plotting_history, plot_filename):
     """Plot and export the history of the changes in the loss and the accuracy \
         for both the training and validation datasets"""
-    figure, (axis_loss, axis_accuracy) = pyplot.subplots(2, 1, sharex=True, figsize=(8,8))
+    figure, (axis_loss, axis_accuracy) = pyplot.subplots(2, 1, sharex=True, figsize=(8, 8))
     pyplot.subplots_adjust(hspace=0.00)
 
     # axis_loss.plot(plotting_history['loss'], label='training', color='b')
