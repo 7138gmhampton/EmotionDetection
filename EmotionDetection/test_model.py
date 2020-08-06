@@ -7,7 +7,8 @@ import os
 import numpy
 
 os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
-os.environ['PLAIDML_VERBOSE'] = '4'
+# os.environ['PLAIDML_VERBOSE'] = '0'
+
 # pylint: disable=wrong-import-position
 from metrics import author_confusion_matrix, log_accuracy
 from model_builders import reload_model
