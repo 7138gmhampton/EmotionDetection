@@ -62,7 +62,8 @@ def plot_training(plotting_history, plot_filename):
     axis_loss.plot(plotting_history['loss'], label='training', color='b')
     axis_loss.plot(plotting_history['val_loss'], label='validation', color='r')
     axis_loss.set(ylabel='Loss')
-    axis_loss.grid(True, which='major', axis='x', linewidth='0.5')
+    # axis_loss.grid(True, which='major', axis='x', linewidth='0.5')
+    axis_loss.xaxis.grid(True, which='major', linewidth='0.5')
     axis_loss.legend()
 
     axis_accuracy.plot(plotting_history['acc'], label='training', color='b')
