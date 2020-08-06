@@ -2,6 +2,13 @@
     Expression Recognition classifier"""
 MODEL_DIRECTORY = 'models'
 FACE_EXTRACTOR = 'haarcascade_frontalface_default.xml'
+IMAGE_DIRECTORIES = [('000 neutral', 0),
+                     ('001 surprise', 1),
+                     ('002 sadness', 2),
+                     ('003 fear', 3),
+                     ('004 anger', 4),
+                     ('005 disgust', 5),
+                     ('006 joy', 6)]
 
 # IMAGE_HEIGHT = 490
 # IMAGE_WIDTH = 640

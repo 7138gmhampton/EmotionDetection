@@ -6,7 +6,7 @@ import random
 import matplotlib.pyplot as pyplot
 import numpy
 
-from hyper import FACE_SIZE, CLOCKWISE, ANTICLOCKWISE
+from hyper import FACE_SIZE, CLOCKWISE, ANTICLOCKWISE, IMAGE_DIRECTORIES
 os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
 os.environ['PLAIDML_VERBOSE'] = '4'
 # pylint: disable=wrong-import-position
@@ -41,18 +41,18 @@ def load_entire_emotion(directory_of_images, emotion_code):
 
     return images
 
-directories = [('000 neutral', 0),
-               ('001 surprise', 1),
-               ('002 sadness', 2),
-               ('003 fear', 3),
-               ('004 anger', 4),
-               ('005 disgust', 5),
-               ('006 joy', 6)]
+# IMAGE_DIRECTORIES = [('000 neutral', 0),
+#                ('001 surprise', 1),
+#                ('002 sadness', 2),
+#                ('003 fear', 3),
+#                ('004 anger', 4),
+#                ('005 disgust', 5),
+#                ('006 joy', 6)]
 
 prepared_images = []
 
 print(' -- Prepare and Augment --')
-for directory in directories:
+for directory in IMAGE_DIRECTORIES:
     prepared_images.extend(load_entire_emotion(directory[0], directory[1]))
 
 random.shuffle(prepared_images)
