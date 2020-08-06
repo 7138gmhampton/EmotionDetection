@@ -14,6 +14,7 @@ from keras.preprocessing.image import load_img, img_to_array
 from progress_bar import progress_bar
 from face_extract import excise_face
 from hyper import FACE_SIZE
+from image_preparation import rotate_image, prepare_image
 
 # Command Line Parameters
 parser = argparse.ArgumentParser(description='Prepare and augment the Cohn-Kanade\
@@ -22,30 +23,30 @@ parser.add_argument('-r', '--restrict', action='store_true',
                     help='Preprocess without augmenting')
 args = parser.parse_args()
 
-TrainableImage = namedtuple('TrainableImage', ['image_array', 'emotion'])
+# TrainableImage = namedtuple('TrainableImage', ['image_array', 'emotion'])
 
 CLOCKWISE = 5
 ANTICLOCKWISE = -CLOCKWISE
 
-def rotate_image(array_image, rotation):
-    """This function rotates the image clockwise or anticlockwise for data \
-        augmentation"""
-    rows, cols, channels = array_image.shape # pylint: disable=unused-variable
+# def rotate_image(array_image, rotation):
+#     """This function rotates the image clockwise or anticlockwise for data \
+#         augmentation"""
+#     rows, cols, channels = array_image.shape # pylint: disable=unused-variable
 
-    rotation_matrix = cv2.getRotationMatrix2D((cols/2, rows/2), rotation, 1)
+#     rotation_matrix = cv2.getRotationMatrix2D((cols/2, rows/2), rotation, 1)
 
-    return cv2.warpAffine(array_image, rotation_matrix, (cols, rows))
+#     return cv2.warpAffine(array_image, rotation_matrix, (cols, rows))
 
-def prepare_image(file, emotion_code, reverse=False, rotate=0):
-    """Load in single image, extract the face and denote the assigned emotion"""
-    image = load_img(file, color_mode='grayscale', target_size=None)
-    if reverse: image.transpose(Image.FLIP_LEFT_RIGHT)
+# def prepare_image(file, emotion_code, reverse=False, rotate=0):
+#     """Load in single image, extract the face and denote the assigned emotion"""
+#     image = load_img(file, color_mode='grayscale', target_size=None)
+#     if reverse: image.transpose(Image.FLIP_LEFT_RIGHT)
 
-    image_as_array = img_to_array(image)
-    if rotate != 0: image_as_array = rotate_image(image_as_array, rotate)
-    face_only = excise_face(image_as_array)
+#     image_as_array = img_to_array(image)
+#     if rotate != 0: image_as_array = rotate_image(image_as_array, rotate)
+#     face_only = excise_face(image_as_array)
 
-    return TrainableImage(face_only, emotion_code)
+#     return TrainableImage(face_only, emotion_code)
 
 def load_entire_emotion(directory_of_images, emotion_code):
     """Prepare an entire emotion's worth of images for training"""
@@ -111,6 +112,6 @@ print(' -- Labels saved -- ')
 # Check Output
 for iii in range(3):
     pyplot.figure(iii).suptitle(indexed_labels[iii])
-    pyplot.imshow(trainable_data[iii].reshape(FACE_SIZE), interpolation='none',\
+    pyplot.imshow(trainable_data[iii].reshape(FACE_SIZE), interpolation='none',
         cmap='gray')
 pyplot.show()
