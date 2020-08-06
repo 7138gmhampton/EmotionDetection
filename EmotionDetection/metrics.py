@@ -11,6 +11,15 @@ from hyper import BATCH_SIZE, MODEL_DIRECTORY, SCALE_DOWN_FACTOR
 
 labels = ['joy', 'disgust', 'anger', 'fear', 'sadness', 'surprise', 'neutral']
 
+def _get_loss_limits(history):
+    training_max = max(history['loss'])
+    validation_max = max(history['val_loss'])
+    highest = training_max if training_max > validation_max else validation_max
+    
+    padding = 0.05 * highest
+    
+    return [0-padding, highest+padding]
+
 def author_confusion_matrix(true, predicted, timestamp):
     """Prepare and save confusion matrix for tested model"""
     matrix_filename = timestamp + '_confusion.png'
@@ -63,6 +72,8 @@ def plot_training(plotting_history, plot_filename):
     axis_loss.plot(plotting_history['val_loss'], label='validation', color='r')
     axis_loss.set(ylabel='Loss')
     # axis_loss.grid(True, which='major', axis='x', linewidth='0.5')
+    # axis_loss.set_ylim([0-(0.05*max(plotting_history['loss'])), max(plotting_history['loss'])])
+    axis_loss.set_ylim(_get_loss_limits(plotting_history))
     axis_loss.xaxis.grid(True, which='major', linewidth='0.5')
     axis_loss.legend()
 
