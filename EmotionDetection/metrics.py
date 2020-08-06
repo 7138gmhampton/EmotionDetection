@@ -24,8 +24,8 @@ def author_confusion_matrix(true, predicted, timestamp):
     tick_marks = numpy.arange(len(labels))
     axis.set_xticks(tick_marks)
     axis.set_xticklabels(labels)
-    axis.set_xticks(tick_marks)
-    axis.set_xticklabels(labels)
+    axis.set_yticks(tick_marks)
+    axis.set_yticklabels(labels)
     threshold = matrix.max()/2
 
     for iii, jjj in product(range(matrix.shape[0]), range(matrix.shape[1])):
