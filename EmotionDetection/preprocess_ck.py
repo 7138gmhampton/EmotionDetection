@@ -1,19 +1,17 @@
 """Prepare the Cohn-Kanade Dataset for Training"""
-import os
 import argparse
+import os
 import random
-import numpy
-# import cv2
-# from PIL import Image
-import matplotlib.pyplot as pyplot
 
-os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
-# pylint: disable=wrong-import-position
-# from keras.preprocessing.image import load_img, img_to_array
-from progress_bar import progress_bar
-# from face_extract import excise_face
+import matplotlib.pyplot as pyplot
+import numpy
+
 from hyper import FACE_SIZE
+os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
+os.environ['PLAIDML_VERBOSE'] = '4'
+# pylint: disable=wrong-import-position
 from image_preparation import prepare_image
+from progress_bar import progress_bar
 
 # Command Line Parameters
 parser = argparse.ArgumentParser(description='Prepare and augment the Cohn-Kanade\
@@ -21,6 +19,8 @@ parser = argparse.ArgumentParser(description='Prepare and augment the Cohn-Kanad
 parser.add_argument('-r', '--restrict', action='store_true',
                     help='Preprocess without augmenting')
 args = parser.parse_args()
+
+
 
 # TrainableImage = namedtuple('TrainableImage', ['image_array', 'emotion'])
 
