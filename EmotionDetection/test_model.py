@@ -7,18 +7,10 @@ import os
 import numpy
 
 os.environ['KERAS_BACKEND'] = 'plaidml.keras.backend'
+os.environ['PLAIDML_VERBOSE'] = '4'
 # pylint: disable=wrong-import-position
 from metrics import author_confusion_matrix, log_accuracy
-from hyper import MODEL_DIRECTORY
 from model_builders import reload_model
-
-# def log_accuracy(timestamp, calculated_accuracy):
-#     """Append the accuracy calculated from the test dataset to the model details text file"""
-#     details_name = timestamp + '_details.txt'
-
-#     with open(os.path.join(MODEL_DIRECTORY, details_name), 'r+') as details:
-#         if 'Test Accuracy: ' not in details.read():
-#             details.write('Test Accuracy: ' + '{:1.3f}'.format(calculated_accuracy) + '\n')
 
 # Set up Command Line Arguments
 parser = argparse.ArgumentParser(description='Apply test examples to trained model.')
