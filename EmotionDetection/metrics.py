@@ -39,6 +39,12 @@ def _prepare_graph(graph, history, loss):
         graph.yaxis.set_major_formatter(PercentFormatter(xmax=1.0))
         graph.set_ylim([0, 1.05])
         graph.set_xlabel('Epoch')
+        
+def _colourise_text(graph, matrix, threshold):
+    for iii, jjj in product(range(matrix.shape[0]), range(matrix.shape[1])):
+        graph.text(jjj, iii, format(matrix[iii, jjj], '0.2f'),
+                  horizontalalignment='center',
+                  color='white' if matrix[iii, jjj] > threshold else 'black')
 
 def author_confusion_matrix(true, predicted, timestamp):
     """Prepare and save confusion matrix for tested model"""
@@ -55,12 +61,13 @@ def author_confusion_matrix(true, predicted, timestamp):
     axis.set_xticklabels(labels, rotation=45, ha='right')
     axis.set_yticks(tick_marks)
     axis.set_yticklabels(labels)
-    threshold = matrix.max()/2
+    # threshold = matrix.max()/2
 
-    for iii, jjj in product(range(matrix.shape[0]), range(matrix.shape[1])):
-        axis.text(jjj, iii, format(matrix[iii, jjj], '0.2f'),
-                  horizontalalignment='center',
-                  color='white' if matrix[iii, jjj] > threshold else 'black')
+    # for iii, jjj in product(range(matrix.shape[0]), range(matrix.shape[1])):
+    #     axis.text(jjj, iii, format(matrix[iii, jjj], '0.2f'),
+    #               horizontalalignment='center',
+    #               color='white' if matrix[iii, jjj] > threshold else 'black')
+    _colourise_text(axis, matrix, matrix.max()/2)
 
     axis.set_ylabel('True Label')
     axis.set_xlabel('Predicted Label')
